@@ -1,0 +1,32 @@
+# dependencies
+**/node_modules/
+
+# Next.js
+**/.next/
+**/out/
+
+# build
+**/dist/
+**/build/
+
+# env
+**/.env
+**/.env.*
+
+# logs
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/
+
+# local documents
+document(2).pdf
+my.docx
+my_extracted.md
+数字孪生大屏规划文档.md
