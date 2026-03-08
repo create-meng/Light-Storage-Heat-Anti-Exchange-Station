@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { RoundedBox, Cylinder } from '@react-three/drei'
+import { RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
 
 type DemoMode = 'idle' | 'normal' | 'abnormal'
@@ -16,7 +16,7 @@ export const LAYER_THICKNESS = {
   pcm2: 0.028,        // 二级PCM（无机盐/陶瓷基）- 放大显示
   aerogel: 0.022,     // 气凝胶隔热层 - 放大显示
   shell: 0.012,       // 外壳 - 放大显示
-  quickRelease: 0.006,// 快拆结构
+  quickRelease: 0.0,// 快拆结构
 }
 
 // PCM着色器
@@ -194,12 +194,12 @@ export function BatteryModuleWithPCM({
         </RoundedBox>
 
         {/* 电芯单元（内部结构可视化） */}
-        {showDetails && [-0.24, -0.08, 0.08, 0.24].map((x, idx) => (
+        {[-0.24, -0.08, 0.08, 0.24].map((x, idx) => (
           <RoundedBox key={`cell-${idx}`} args={[0.14, 0.72, 0.38]} position={[x, 0, 0]} radius={0.015}>
             <meshStandardMaterial
               color="#e2e8f0"
               transparent
-              opacity={0.22}
+              opacity={showDetails ? 0.22 : 0.14}
               depthWrite={false}
               metalness={0.05}
               roughness={0.85}
@@ -218,14 +218,67 @@ export function BatteryModuleWithPCM({
           />
         </RoundedBox>
 
-        {/* 正负极柱 */}
-        {showDetails && [-0.28, 0.28].map((x, idx) => (
-          <group key={`pole-${idx}`} position={[x, 0.46, 0]}>
-            <Cylinder args={[0.025, 0.025, 0.04]} rotation={[Math.PI / 2, 0, 0]}>
-              <meshStandardMaterial color={idx === 0 ? '#dc2626' : '#3b82f6'} metalness={0.9} roughness={0.2} />
-            </Cylinder>
+        {/* 绑带（环绕电池一圈） */}
+        {showDetails && (
+          <group>
+            {[0.18, -0.08].map((y, bandIdx) => (
+              <group key={`band-${bandIdx}`} position={[0, y, 0]} renderOrder={11}>
+                {/* 左侧 */}
+                <RoundedBox args={[0.02, 0.04, 0.46]} position={[-(layer.battery / 2 + 0.01), 0, 0]} radius={0.008}>
+                  <meshStandardMaterial
+                    color="#0ea5e9"
+                    emissive="#22d3ee"
+                    emissiveIntensity={0.35}
+                    transparent
+                    opacity={0.85}
+                    depthWrite={false}
+                    roughness={0.25}
+                    metalness={0.15}
+                  />
+                </RoundedBox>
+                {/* 右侧 */}
+                <RoundedBox args={[0.02, 0.04, 0.46]} position={[(layer.battery / 2 + 0.01), 0, 0]} radius={0.008}>
+                  <meshStandardMaterial
+                    color="#0ea5e9"
+                    emissive="#22d3ee"
+                    emissiveIntensity={0.35}
+                    transparent
+                    opacity={0.85}
+                    depthWrite={false}
+                    roughness={0.25}
+                    metalness={0.15}
+                  />
+                </RoundedBox>
+                {/* 前侧 */}
+                <RoundedBox args={[layer.battery + 0.06, 0.04, 0.02]} position={[0, 0, (0.44 / 2 + 0.01)]} radius={0.008}>
+                  <meshStandardMaterial
+                    color="#0ea5e9"
+                    emissive="#22d3ee"
+                    emissiveIntensity={0.35}
+                    transparent
+                    opacity={0.85}
+                    depthWrite={false}
+                    roughness={0.25}
+                    metalness={0.15}
+                  />
+                </RoundedBox>
+                {/* 后侧 */}
+                <RoundedBox args={[layer.battery + 0.06, 0.04, 0.02]} position={[0, 0, -(0.44 / 2 + 0.01)]} radius={0.008}>
+                  <meshStandardMaterial
+                    color="#0ea5e9"
+                    emissive="#22d3ee"
+                    emissiveIntensity={0.35}
+                    transparent
+                    opacity={0.85}
+                    depthWrite={false}
+                    roughness={0.25}
+                    metalness={0.15}
+                  />
+                </RoundedBox>
+              </group>
+            ))}
           </group>
-        ))}
+        )}
 
         {/* 把手 */}
         {showDetails && (
@@ -256,9 +309,9 @@ export function BatteryModuleWithPCM({
         <meshStandardMaterial
           color="#c4b5fd"
           emissive="#a78bfa"
-          emissiveIntensity={0.35}
+          emissiveIntensity={0.65}
           transparent
-          opacity={0.85}
+          opacity={0.93}
           depthWrite={false}
           roughness={0.4}
           metalness={0.15}
@@ -273,9 +326,9 @@ export function BatteryModuleWithPCM({
         <meshStandardMaterial
           color="#c4b5fd"
           emissive="#a78bfa"
-          emissiveIntensity={0.35}
+          emissiveIntensity={0.65}
           transparent
-          opacity={0.85}
+          opacity={0.93}
           depthWrite={false}
           roughness={0.4}
           metalness={0.15}
@@ -290,9 +343,9 @@ export function BatteryModuleWithPCM({
         <meshStandardMaterial
           color="#94a3b8"
           emissive="#94a3b8"
-          emissiveIntensity={0.08}
+          emissiveIntensity={0.22}
           transparent
-          opacity={0.7}
+          opacity={0.88}
           depthWrite={false}
           roughness={0.65}
           metalness={0.1}
@@ -307,9 +360,9 @@ export function BatteryModuleWithPCM({
         <meshStandardMaterial
           color="#94a3b8"
           emissive="#94a3b8"
-          emissiveIntensity={0.08}
+          emissiveIntensity={0.22}
           transparent
-          opacity={0.7}
+          opacity={0.88}
           depthWrite={false}
           roughness={0.65}
           metalness={0.1}
@@ -329,7 +382,7 @@ export function BatteryModuleWithPCM({
           fragmentShader={PCM_SHADER.fragment}
           transparent
           depthWrite={false}
-          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
           uniforms={{
             uTime: { value: 0 },
             uMelt: { value: pcm1Melt },
@@ -349,7 +402,7 @@ export function BatteryModuleWithPCM({
           fragmentShader={PCM_SHADER.fragment}
           transparent
           depthWrite={false}
-          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
           uniforms={{
             uTime: { value: 0 },
             uMelt: { value: pcm1Melt },
@@ -367,9 +420,10 @@ export function BatteryModuleWithPCM({
         <meshStandardMaterial
           color="#14b8a6"
           emissive="#22d3ee"
-          emissiveIntensity={mode === 'abnormal' ? 0.32 : 0.18}
+          emissiveIntensity={mode === 'abnormal' ? 0.55 : 0.3}
           transparent
-          opacity={mode === 'abnormal' ? 0.7 : 0.5}
+          opacity={mode === 'abnormal' ? 0.85 : 0.68}
+          depthWrite={false}
           roughness={0.25}
           metalness={0.05}
         />
@@ -383,9 +437,10 @@ export function BatteryModuleWithPCM({
         <meshStandardMaterial
           color="#14b8a6"
           emissive="#22d3ee"
-          emissiveIntensity={mode === 'abnormal' ? 0.32 : 0.18}
+          emissiveIntensity={mode === 'abnormal' ? 0.55 : 0.3}
           transparent
-          opacity={mode === 'abnormal' ? 0.7 : 0.5}
+          opacity={mode === 'abnormal' ? 0.85 : 0.68}
+          depthWrite={false}
           roughness={0.25}
           metalness={0.05}
         />
@@ -470,7 +525,7 @@ export function BatteryModuleWithPCM({
           fragmentShader={PCM_SHADER.fragment}
           transparent
           depthWrite={false}
-          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
           uniforms={{
             uTime: { value: 0 },
             uMelt: { value: pcm2Melt },
@@ -490,7 +545,7 @@ export function BatteryModuleWithPCM({
           fragmentShader={PCM_SHADER.fragment}
           transparent
           depthWrite={false}
-          blending={THREE.AdditiveBlending}
+          side={THREE.DoubleSide}
           uniforms={{
             uTime: { value: 0 },
             uMelt: { value: pcm2Melt },
@@ -508,9 +563,10 @@ export function BatteryModuleWithPCM({
         <meshStandardMaterial
           color={mode === 'abnormal' && temperature >= 55 ? '#f97316' : '#60a5fa'}
           emissive={mode === 'abnormal' && temperature >= 55 ? '#fb7185' : '#60a5fa'}
-          emissiveIntensity={mode === 'abnormal' && temperature >= 55 ? 0.4 : 0.15}
+          emissiveIntensity={mode === 'abnormal' && temperature >= 55 ? 0.7 : 0.28}
           transparent
-          opacity={mode === 'abnormal' && temperature >= 55 ? 0.75 : 0.4}
+          opacity={mode === 'abnormal' && temperature >= 55 ? 0.88 : 0.62}
+          depthWrite={false}
           roughness={0.3}
           metalness={0.05}
         />
@@ -524,9 +580,10 @@ export function BatteryModuleWithPCM({
         <meshStandardMaterial
           color={mode === 'abnormal' && temperature >= 55 ? '#f97316' : '#60a5fa'}
           emissive={mode === 'abnormal' && temperature >= 55 ? '#fb7185' : '#60a5fa'}
-          emissiveIntensity={mode === 'abnormal' && temperature >= 55 ? 0.4 : 0.15}
+          emissiveIntensity={mode === 'abnormal' && temperature >= 55 ? 0.7 : 0.28}
           transparent
-          opacity={mode === 'abnormal' && temperature >= 55 ? 0.75 : 0.4}
+          opacity={mode === 'abnormal' && temperature >= 55 ? 0.88 : 0.62}
+          depthWrite={false}
           roughness={0.3}
           metalness={0.05}
         />
@@ -540,15 +597,17 @@ export function BatteryModuleWithPCM({
         radius={0.008}
       >
         <meshStandardMaterial
-          color="#f0fdfa"
-          emissive="#5eead4"
-          emissiveIntensity={mode === 'abnormal' && temperature >= 100 ? 0.4 : 0.2}
+          color="#f8fafc"
+          emissive="#67e8f9"
+          emissiveIntensity={0.38}
           transparent
-          opacity={mode === 'abnormal' && temperature >= 100 ? 0.7 : 0.5}
-          roughness={0.85}
+          opacity={mode === 'abnormal' && temperature >= 100 ? 0.88 : 0.72}
+          depthWrite={false}
+          roughness={0.9}
           metalness={0}
         />
       </RoundedBox>
+
       {/* 右侧 */}
       <RoundedBox
         args={[layer.aerogel, 0.70, 0.34]}
@@ -556,15 +615,17 @@ export function BatteryModuleWithPCM({
         radius={0.008}
       >
         <meshStandardMaterial
-          color="#f0fdfa"
-          emissive="#5eead4"
-          emissiveIntensity={mode === 'abnormal' && temperature >= 100 ? 0.4 : 0.2}
+          color="#f8fafc"
+          emissive="#67e8f9"
+          emissiveIntensity={0.38}
           transparent
-          opacity={mode === 'abnormal' && temperature >= 100 ? 0.7 : 0.5}
-          roughness={0.85}
+          opacity={mode === 'abnormal' && temperature >= 100 ? 0.88 : 0.72}
+          depthWrite={false}
+          roughness={0.9}
           metalness={0}
         />
       </RoundedBox>
+
       {/* 前侧 */}
       <RoundedBox
         args={[layer.battery + (layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel) * 2, 0.70, layer.aerogel]}
@@ -572,15 +633,17 @@ export function BatteryModuleWithPCM({
         radius={0.005}
       >
         <meshStandardMaterial
-          color="#ffffff"
-          emissive="#ffffff"
-          emissiveIntensity={mode === 'abnormal' && temperature >= 100 ? 0.12 : 0.04}
+          color="#f8fafc"
+          emissive="#67e8f9"
+          emissiveIntensity={0.32}
           transparent
-          opacity={mode === 'abnormal' && temperature >= 100 ? 0.45 : 0.22}
+          opacity={mode === 'abnormal' && temperature >= 100 ? 0.86 : 0.7}
+          depthWrite={false}
           roughness={0.9}
           metalness={0}
         />
       </RoundedBox>
+
       {/* 后侧 */}
       <RoundedBox
         args={[layer.battery + (layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel) * 2, 0.70, layer.aerogel]}
@@ -588,11 +651,12 @@ export function BatteryModuleWithPCM({
         radius={0.005}
       >
         <meshStandardMaterial
-          color="#ffffff"
-          emissive="#ffffff"
-          emissiveIntensity={mode === 'abnormal' && temperature >= 100 ? 0.12 : 0.04}
+          color="#f8fafc"
+          emissive="#67e8f9"
+          emissiveIntensity={0.32}
           transparent
-          opacity={mode === 'abnormal' && temperature >= 100 ? 0.45 : 0.22}
+          opacity={mode === 'abnormal' && temperature >= 100 ? 0.86 : 0.7}
+          depthWrite={false}
           roughness={0.9}
           metalness={0}
         />
@@ -607,10 +671,13 @@ export function BatteryModuleWithPCM({
       >
         <meshStandardMaterial
           color="#475569"
+          emissive="#0f172a"
+          emissiveIntensity={0.08}
           metalness={0.7}
           roughness={0.4}
           transparent
-          opacity={0.85}
+          opacity={0.55}
+          depthWrite={false}
         />
       </RoundedBox>
       {/* 右侧 */}
@@ -621,10 +688,13 @@ export function BatteryModuleWithPCM({
       >
         <meshStandardMaterial
           color="#475569"
+          emissive="#0f172a"
+          emissiveIntensity={0.08}
           metalness={0.7}
           roughness={0.4}
           transparent
-          opacity={0.85}
+          opacity={0.55}
+          depthWrite={false}
         />
       </RoundedBox>
       {/* 前侧 */}
@@ -638,7 +708,8 @@ export function BatteryModuleWithPCM({
           metalness={0.7}
           roughness={0.4}
           transparent
-          opacity={0.85}
+          opacity={0.55}
+          depthWrite={false}
         />
       </RoundedBox>
       {/* 后侧 */}
@@ -652,31 +723,10 @@ export function BatteryModuleWithPCM({
           metalness={0.7}
           roughness={0.4}
           transparent
-          opacity={0.85}
+          opacity={0.55}
+          depthWrite={false}
         />
       </RoundedBox>
-
-      {/* ============ 快拆结构（磁吸式） ============ */}
-      {showDetails && (
-        <>
-          {/* 左侧快拆点 */}
-          {[-0.25, 0.25].map((y, idx) => (
-            <group key={`qr-left-${idx}`} position={[-(layer.battery / 2 + layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell + layer.quickRelease / 2), y, 0]}>
-              <Cylinder args={[0.015, 0.015, 0.04]} rotation={[0, 0, Math.PI / 2]}>
-                <meshStandardMaterial color="#6366f1" emissive="#6366f1" emissiveIntensity={0.25} metalness={0.8} />
-              </Cylinder>
-            </group>
-          ))}
-          {/* 右侧快拆点 */}
-          {[-0.25, 0.25].map((y, idx) => (
-            <group key={`qr-right-${idx}`} position={[(layer.battery / 2 + layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell + layer.quickRelease / 2), y, 0]}>
-              <Cylinder args={[0.015, 0.015, 0.04]} rotation={[0, 0, Math.PI / 2]}>
-                <meshStandardMaterial color="#6366f1" emissive="#6366f1" emissiveIntensity={0.25} metalness={0.8} />
-              </Cylinder>
-            </group>
-          ))}
-        </>
-      )}
     </group>
   )
 }

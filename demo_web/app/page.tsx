@@ -18,6 +18,7 @@ import {
   CircleDot
 } from 'lucide-react'
 import Model3D from './components/Model3D'
+import PCMStructureDiagram from './components/PCMStructureDiagram'
 
 type DemoMode = 'idle' | 'normal' | 'abnormal'
 type AlertLevel = 'normal' | 'warning' | 'danger' | 'critical'
@@ -264,30 +265,22 @@ export default function Home() {
         <div className="absolute bottom-20 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--hud-line)] to-transparent opacity-50" />
       </div>
 
-      <header className="fixed top-3 left-4 right-4 z-50 pointer-events-none">
-        <div className="grid grid-cols-[300px_1fr_300px] items-center">
-          <div className="justify-self-start">
-            <div className="glass-panel glass-panel-glow glass-panel-compact" style={{ padding: '10px 16px' }}>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] animate-pulse" />
-                <span className="font-tech text-[11px] font-bold tracking-[0.2em] text-glow" style={{ color: 'var(--accent-cyan)' }}>DIGITAL TWIN</span>
-              </div>
-            </div>
+      <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+        <div className="header-container">
+          {/* 顶部辅助线 */}
+          <div className="header-top-decorator">
+            <div className="header-top-line" />
           </div>
-
-          <div className="justify-self-center">
-            <div className="glass-panel glass-panel-glow" style={{ padding: '12px 24px' }}>
-              <h1 className="hud-title text-[14px] md:text-[16px]">光-储-热-防 换电站节能减排系统</h1>
-            </div>
-          </div>
-
-          <div className="justify-self-end">
-            <div className="glass-panel glass-panel-compact" style={{ padding: '10px 16px' }}>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-[var(--status-normal)] animate-pulse" />
-                <span className="font-mono text-[12px] font-medium" style={{ color: 'var(--text-secondary)' }}>{currentTime}</span>
-              </div>
-            </div>
+          
+          {/* 左右发光长线 */}
+          <div className="header-line-left" />
+          <div className="header-line-right" />
+          
+          {/* 中央梯形标题区域 */}
+          <div className="header-bg-shape">
+            <h1 className="hud-title-main">光-储-热-防 换电站节能减排系统</h1>
+            {/* 底部短亮线 */}
+            <div className="header-line-inner" />
           </div>
         </div>
       </header>
@@ -310,225 +303,25 @@ export default function Home() {
         }
       `}</style>
 
-      <div className="fixed top-16 bottom-24 left-4 right-4 z-40 pointer-events-none">
-        <div className="h-full grid grid-cols-[300px_1fr_300px] gap-3">
-          {/* 左侧能源看板 - 科技感设计 */}
+      <div className="fixed top-16 bottom-4 left-4 right-4 z-40 pointer-events-none">
+        <div className="h-full grid grid-cols-[280px_1fr_360px] gap-3">
+          {/* 左侧安全看板 */}
           <aside className="pointer-events-auto overflow-hidden min-h-0">
             <div className="h-full flex flex-col gap-3 min-h-0">
-              {/* 光伏功率 */}
-              <div className="glass-panel glass-panel-glow glass-panel-compact data-card-glow">
-                <div className="panel-header">
-                  <div className="flex items-center gap-2">
-                    <Sun className="w-4 h-4" style={{ color: 'var(--accent-amber)' }} />
-                    <span className="panel-title">光伏发电</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--accent-amber)' }} />
-                    <span className="text-[10px] font-tech" style={{ color: 'var(--accent-amber)' }}>ACTIVE</span>
-                  </div>
-                </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="data-value text-glow" style={{ color: 'var(--accent-amber)' }}>{pvPower.toFixed(1)}</span>
-                  <span className="data-unit">kW</span>
-                </div>
-                <div className="progress-bar mt-3">
-                  <div className="progress-bar-fill" style={{ width: `${Math.min(100, pvPower / 40 * 100)}%`, background: 'linear-gradient(90deg, var(--accent-amber), rgba(255,170,0,0.5))', boxShadow: '0 0 10px rgba(255,170,0,0.4)' }} />
+              {/* DIGITAL TWIN 标题 */}
+              <div className="glass-panel glass-panel-glow glass-panel-compact">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] animate-pulse" />
+                  <span className="font-tech text-[11px] font-bold tracking-[0.2em] text-glow" style={{ color: 'var(--accent-cyan)' }}>DIGITAL TWIN</span>
                 </div>
               </div>
 
-              {/* 负荷监控 */}
-              <div className="glass-panel glass-panel-glow glass-panel-compact data-card-glow">
-                <div className="panel-header">
-                  <div className="flex items-center gap-2">
-                    <Activity className="w-4 h-4" style={{ color: 'var(--accent-rose)' }} />
-                    <span className="panel-title">站内负荷</span>
-                  </div>
-                </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="data-value text-glow" style={{ color: 'var(--accent-rose)' }}>{loadPower.toFixed(1)}</span>
-                  <span className="data-unit">kW</span>
-                </div>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>购电功率</span>
-                  <span className={`font-mono text-sm ${gridPower > 0.1 ? 'text-glow' : ''}`} style={{ color: gridPower > 0.1 ? 'var(--status-danger)' : 'var(--text-subtle)' }}>
-                    {gridPower.toFixed(1)} kW
-                  </span>
-                </div>
-              </div>
-
-              {/* 储能系统 */}
-              <div className="glass-panel glass-panel-glow glass-panel-compact data-card-glow">
-                <div className="panel-header">
-                  <div className="flex items-center gap-2">
-                    <Battery className="w-4 h-4" style={{ color: 'var(--accent-emerald)' }} />
-                    <span className="panel-title">储能系统</span>
-                  </div>
-                </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="data-value text-glow" style={{ color: 'var(--accent-emerald)' }}>{storageSoc.toFixed(0)}</span>
-                  <span className="data-unit">%</span>
-                </div>
-                <div className="progress-bar mt-3">
-                  <div className="progress-bar-fill" style={{ width: `${storageSoc}%`, background: 'linear-gradient(90deg, var(--accent-emerald), rgba(0,255,157,0.5))', boxShadow: '0 0 10px rgba(0,255,157,0.4)' }} />
-                </div>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>自给率</span>
-                  <span className="font-mono text-sm text-glow" style={{ color: 'var(--accent-violet)' }}>{selfSupplyRate.toFixed(0)}%</span>
-                </div>
-              </div>
-
-              {/* PCM层级演示面板 */}
-              <div className="glass-panel glass-panel-glow glass-panel-compact flex-1 min-h-0">
-                <div className="panel-header">
-                  <div className="flex items-center gap-2">
-                    <Shield className="w-4 h-4" style={{ color: 'var(--accent-cyan)' }} />
-                    <span className="panel-title">双级PCM层级状态</span>
-                  </div>
-                </div>
-            
-            <div className="flex gap-3 h-[calc(100%-48px)]">
-              {/* 层级剖面图 - 左侧可视化 */}
-              <div className="w-[120px] flex-shrink-0 flex flex-col">
-                <div className="text-[10px] font-tech mb-1" style={{ color: 'var(--text-muted)' }}>剖面结构</div>
-                <div className="flex-1 rounded-lg overflow-hidden border border-[var(--glass-border)] bg-[var(--bg-card)] flex flex-col justify-center py-1">
-                  {/* 电池核心 */}
-                  <div className="flex items-center h-3 gap-1 px-1">
-                    <div className="w-8 h-full rounded-sm" style={{ background: 'linear-gradient(135deg, #1e293b, #334155)' }} />
-                    <span className="text-[8px]" style={{ color: 'var(--text-muted)' }}>电池</span>
-                  </div>
-                  {/* 硅胶垫 */}
-                  <div className="flex items-center h-2 gap-1 px-1">
-                    <div className="w-8 h-full rounded-sm relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #c4b5fd, #a78bfa)' }}>
-                      <div className="absolute inset-0" style={{
-                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
-                        backgroundSize: '200% 100%',
-                        animation: 'pcmFlow 3s linear infinite',
-                      }} />
-                    </div>
-                    <span className="text-[8px]" style={{ color: 'var(--text-subtle)' }}>硅胶垫</span>
-                  </div>
-                  {/* 一级PCM */}
-                  <div className="flex items-center h-4 gap-1 px-1 relative">
-                    <div className="w-8 h-full rounded-sm relative overflow-hidden" style={{ 
-                      background: pcmStage >= 1 ? 'linear-gradient(135deg, #06b6d4, #0891b2)' : 'linear-gradient(135deg, #0e7490, #155e75)',
-                      boxShadow: pcmStage >= 1 ? '0 0 12px rgba(0,212,255,0.6)' : 'none',
-                    }}>
-                      <div className="absolute inset-0" style={{
-                        background: pcmStage >= 1 
-                          ? 'linear-gradient(90deg, transparent, rgba(0,212,255,0.5), transparent)'
-                          : 'linear-gradient(90deg, transparent, rgba(0,150,200,0.2), transparent)',
-                        backgroundSize: '200% 100%',
-                        animation: pcmStage >= 1 ? 'pcmMelt 2s ease-in-out infinite' : 'pcmFlow 4s linear infinite',
-                      }} />
-                      {pcmStage === 1 && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-1 h-1 rounded-full bg-white animate-pulse" />
-                        </div>
-                      )}
-                    </div>
-                    <span className="text-[8px]" style={{ color: pcmStage >= 1 ? 'var(--accent-cyan)' : 'var(--text-muted)' }}>
-                      一级PCM
-                    </span>
-                  </div>
-                  {/* 铝箔 */}
-                  <div className="flex items-center h-2 gap-1 px-1">
-                    <div className="w-8 h-full rounded-sm relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #e2e8f0, #cbd5e1)' }}>
-                      <div className="absolute inset-0" style={{
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%)',
-                        backgroundSize: '200% 100%',
-                        animation: 'pcmFlow 2.5s linear infinite',
-                      }} />
-                    </div>
-                    <span className="text-[8px]" style={{ color: 'var(--text-subtle)' }}>铝箔</span>
-                  </div>
-                  {/* 二级PCM */}
-                  <div className="flex items-center h-4 gap-1 px-1 relative">
-                    <div className="w-8 h-full rounded-sm relative overflow-hidden" style={{ 
-                      background: pcmStage >= 2 ? 'linear-gradient(135deg, #f97316, #ea580c)' : 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                      boxShadow: pcmStage >= 2 ? '0 0 12px rgba(249,115,22,0.6)' : 'none',
-                    }}>
-                      <div className="absolute inset-0" style={{
-                        background: pcmStage >= 2 
-                          ? 'linear-gradient(90deg, transparent, rgba(249,115,22,0.5), transparent)'
-                          : 'linear-gradient(90deg, transparent, rgba(59,130,246,0.2), transparent)',
-                        backgroundSize: '200% 100%',
-                        animation: pcmStage >= 2 ? 'pcmMelt 1.8s ease-in-out infinite' : 'pcmFlow 4s linear infinite',
-                      }} />
-                      {pcmStage === 2 && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-1 h-1 rounded-full bg-white animate-pulse" />
-                        </div>
-                      )}
-                    </div>
-                    <span className="text-[8px]" style={{ color: pcmStage >= 2 ? 'var(--status-warning)' : 'var(--text-muted)' }}>
-                      二级PCM
-                    </span>
-                  </div>
-                  {/* 气凝胶 */}
-                  <div className="flex items-center h-3 gap-1 px-1">
-                    <div className="w-8 h-full rounded-sm relative overflow-hidden" style={{ 
-                      background: 'linear-gradient(135deg, #f0fdfa, #ccfbf1)',
-                      boxShadow: pcmStage >= 3 ? '0 0 10px rgba(94,234,212,0.5)' : 'none',
-                    }}>
-                      <div className="absolute inset-0" style={{
-                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                        backgroundSize: '200% 100%',
-                        animation: 'pcmFlow 3.5s linear infinite',
-                      }} />
-                    </div>
-                    <span className="text-[8px]" style={{ color: pcmStage >= 3 ? '#5eead4' : 'var(--text-subtle)' }}>气凝胶</span>
-                  </div>
-                  {/* 外壳 */}
-                  <div className="flex items-center h-2 gap-1 px-1">
-                    <div className="w-8 h-full rounded-sm" style={{ background: 'linear-gradient(135deg, #475569, #334155)' }} />
-                    <span className="text-[8px]" style={{ color: 'var(--text-subtle)' }}>外壳</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* 状态详情 - 右侧 */}
-              <div className="flex-1 flex flex-col min-w-0">
-                <div className="text-[10px] font-tech mb-1" style={{ color: 'var(--text-muted)' }}>当前状态</div>
-                <div className="flex-1 flex flex-col justify-around">
-                  <div className="flex items-center justify-between py-1 border-b" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
-                    <span className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>一级PCM (28-32℃)</span>
-                    <span className={`badge whitespace-nowrap flex-shrink-0 ${pcmStage === 1 ? 'badge-normal' : pcmStage >= 2 ? 'badge-normal' : ''}`} style={{ opacity: pcmStage < 1 ? 0.5 : 1 }}>
-                      {pcmStage === 1 ? '相变中' : pcmStage >= 2 ? '已完成' : '待触发'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between py-1 border-b" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
-                    <span className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>二级PCM (55-60℃)</span>
-                    <span className={`badge whitespace-nowrap flex-shrink-0 ${pcmStage === 2 ? 'badge-danger' : pcmStage >= 3 ? 'badge-danger' : ''}`} style={{ opacity: pcmStage < 2 ? 0.5 : 1 }}>
-                      {pcmStage === 2 ? '相变中' : pcmStage >= 3 ? '已触发' : '待触发'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between py-1">
-                    <span className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>气凝胶隔热</span>
-                    <span className={`badge whitespace-nowrap flex-shrink-0 ${pcmStage >= 3 ? 'badge-warning' : ''}`} style={{ opacity: pcmStage < 3 ? 0.5 : 1 }}>
-                      {pcmStage >= 3 ? '阻断中' : '常态'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-              </div>
-            </div>
-          </aside>
-
-          <div />
-
-          {/* 右侧安全看板 */}
-          <aside className="pointer-events-auto overflow-hidden min-h-0">
-            <div className="h-full flex flex-col gap-3 min-h-0">
               {/* 温度监控 */}
               <div className={`glass-panel glass-panel-glow glass-panel-compact data-card-glow ${alertLevel === 'critical' ? 'glass-panel-danger' : alertLevel === 'danger' ? 'glass-panel-warning' : ''}`}>
                 <div className="panel-header">
                   <div className="flex items-center gap-2">
                     <Thermometer className="w-4 h-4" style={{ color: alertLevel === 'normal' ? 'var(--accent-emerald)' : alertLevel === 'warning' ? 'var(--accent-amber)' : 'var(--status-critical)' }} />
                     <span className="panel-title">温度监控</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className={`w-1.5 h-1.5 rounded-full animate-pulse`} style={{ background: alertLevel === 'normal' ? 'var(--status-normal)' : alertLevel === 'warning' ? 'var(--status-warning)' : 'var(--status-critical)' }} />
                   </div>
                 </div>
                 <div className="flex items-baseline gap-1.5">
@@ -569,59 +362,124 @@ export default function Home() {
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs" style={{ color: 'var(--text-muted)' }}>围栏状态</span>
+                    <span className="text-xs" style={{ color: 'var(--text-muted)' }}>自动状态</span>
                     <div className="flex items-center gap-2">
-                      <div className={`status-dot ${fireWallState !== 'open' ? 'status-critical animate-pulse-subtle' : 'status-normal'}`} />
+                      <div className={`status-dot status-normal`} />
                       <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
-                        {fireWallState === 'open' ? '开启' : fireWallState === 'closing' ? '关闭中' : '已关闭'}
+                        开启
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-xs" style={{ color: 'var(--text-muted)' }}>灭火状态</span>
                     <div className="flex items-center gap-2">
-                      <div className={`status-dot ${extinguishState !== 'standby' ? 'status-critical animate-pulse-subtle' : 'status-normal'}`} />
+                      <div className={`status-dot status-normal`} />
                       <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
-                        {extinguishState === 'standby' ? '待命' : extinguishState === 'active' ? '执行中' : '完成'}
+                        待命
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* 异常提示 */}
-              <div className="mt-auto flex justify-end" style={{ width: safetyPanelCollapsed ? 56 : 300 }}>
-                {mode === 'abnormal' && (fireWallState !== 'open' || extinguishState === 'active') ? (
-                  <div onDoubleClick={() => setSafetyPanelCollapsed(v => !v)}>
-                    <div className={`transition-all duration-300 ease-out ${safetyPanelCollapsed ? 'opacity-60' : 'opacity-100'}`}>
-                      {safetyPanelCollapsed ? (
-                        <div className="glass-panel px-3 py-2">
-                          <div className="text-xs font-semibold text-white/70">安全</div>
-                        </div>
-                      ) : (
-                        <div className="space-y-3">
-                          {fireWallState !== 'open' && (
-                            <div className="glass-panel-danger">
-                              <div className="text-sm font-semibold text-red-300 mb-1">
-                                {fireWallState === 'closing' ? '防火围栏启动中...' : '隔离舱已形成'}
-                              </div>
-                              <div className="text-xs text-white/60">
-                                {fireWallState === 'closing' ? '围栏下降阻断热蔓延路径' : '密封完成，准备定向灭火'}
-                              </div>
-                            </div>
-                          )}
-
-                          {extinguishState === 'active' && (
-                            <div className="glass-panel-accent">
-                              <div className="text-sm font-semibold text-cyan-300 mb-1">定向灭火启动</div>
-                              <div className="text-xs text-white/60">喷头对准故障模组，雾化覆盖抑制复燃</div>
-                            </div>
-                          )}
-                        </div>
-                      )}
+              {/* 安全提示 */}
+              <div className="glass-panel glass-panel-glow glass-panel-compact flex-1 min-h-0">
+                <div className="panel-header">
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-4 h-4" style={{ color: 'var(--accent-amber)' }} />
+                    <span className="panel-title">安全提示</span>
+                  </div>
+                </div>
+                <div className="flex-1 flex flex-col justify-center">
+                  <div className="p-3 rounded bg-[var(--bg-card)] border border-[var(--glass-border)]">
+                    <div className="text-xs text-center" style={{ color: 'var(--text-muted)' }}>
+                      系统正常运行中
                     </div>
                   </div>
-                ) : null}
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <div />
+
+          {/* 右侧能源与PCM结构看板 */}
+          <aside className="pointer-events-auto overflow-hidden min-h-0">
+            <div className="h-full flex flex-col gap-3 min-h-0">
+              {/* 时间显示 */}
+              <div className="glass-panel glass-panel-glow glass-panel-compact">
+                <div className="flex justify-center">
+                  <span className="font-mono text-[20px] font-bold text-glow" style={{ color: 'var(--accent-cyan)' }}>
+                    {currentTime}
+                  </span>
+                </div>
+              </div>
+
+              {/* 光伏功率 */}
+              <div className="glass-panel glass-panel-glow glass-panel-compact data-card-glow">
+                <div className="panel-header">
+                  <div className="flex items-center gap-2">
+                    <Sun className="w-4 h-4" style={{ color: 'var(--accent-amber)' }} />
+                    <span className="panel-title">光发电</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--accent-amber)' }} />
+                    <span className="text-[10px] font-tech" style={{ color: 'var(--accent-amber)' }}>ACTIVE</span>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="data-value text-glow" style={{ color: 'var(--accent-amber)' }}>{pvPower.toFixed(1)}</span>
+                  <span className="data-unit">kW</span>
+                </div>
+                <div className="progress-bar mt-3">
+                  <div className="progress-bar-fill" style={{ width: `${Math.min(100, pvPower / 40 * 100)}%`, background: 'linear-gradient(90deg, var(--accent-amber), rgba(255,179,71,0.5))', boxShadow: '0 0 10px rgba(255,179,71,0.4)' }} />
+                </div>
+              </div>
+
+              {/* 站内负荷 */}
+              <div className="glass-panel glass-panel-glow glass-panel-compact data-card-glow">
+                <div className="panel-header">
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4" style={{ color: 'var(--accent-rose)' }} />
+                    <span className="panel-title">站内负荷</span>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="data-value text-glow" style={{ color: 'var(--accent-rose)' }}>{loadPower.toFixed(1)}</span>
+                  <span className="data-unit">kW</span>
+                </div>
+                <div className="mt-3 flex items-center justify-between">
+                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>站电负荷率</span>
+                  <span className={`font-mono text-sm text-glow`} style={{ color: 'var(--accent-rose)' }}>
+                    {loadPower.toFixed(1)} kW
+                  </span>
+                </div>
+              </div>
+
+              {/* 储能系统 */}
+              <div className="glass-panel glass-panel-glow glass-panel-compact data-card-glow">
+                <div className="panel-header">
+                  <div className="flex items-center gap-2">
+                    <Battery className="w-4 h-4" style={{ color: 'var(--accent-emerald)' }} />
+                    <span className="panel-title">储能系统</span>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="data-value text-glow" style={{ color: 'var(--accent-emerald)' }}>{storageSoc.toFixed(0)}</span>
+                  <span className="data-unit">%</span>
+                </div>
+                <div className="progress-bar mt-3">
+                  <div className="progress-bar-fill" style={{ width: `${storageSoc}%`, background: 'linear-gradient(90deg, var(--accent-emerald), rgba(74,255,212,0.5))', boxShadow: '0 0 10px rgba(74,255,212,0.4)' }} />
+                </div>
+                <div className="mt-3 flex items-center justify-between">
+                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>负荷率</span>
+                  <span className="font-mono text-sm text-glow" style={{ color: 'var(--accent-emerald)' }}>0%</span>
+                </div>
+              </div>
+
+              {/* 双板PCM分层结构示意图 */}
+              <div className="glass-panel glass-panel-glow glass-panel-compact flex-1 min-h-0 overflow-hidden">
+                <PCMStructureDiagram />
               </div>
             </div>
           </aside>
@@ -629,9 +487,9 @@ export default function Home() {
       </div>
 
       <div className="fixed left-0 right-0 bottom-3 z-50 pointer-events-none px-3">
-        <div className="grid grid-cols-[1fr_auto] gap-2 items-end">
+        <div className="flex justify-center">
           {/* 底部控制栏 - 科技感设计 */}
-          <div className="pointer-events-auto justify-self-center">
+          <div className="pointer-events-auto w-full max-w-[760px]">
             <div className="glass-panel glass-panel-glow px-5 py-2">
               <div className="flex items-center gap-4">
                 {/* 时间线 */}

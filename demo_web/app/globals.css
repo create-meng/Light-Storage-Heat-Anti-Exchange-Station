@@ -9,43 +9,43 @@
    ============================================ */
 
 :root {
-  /* 深空背景层次 */
-  --bg-primary: #020408;
-  --bg-secondary: #0a0f1a;
-  --bg-tertiary: #0d1525;
-  --bg-card: rgba(8, 18, 35, 0.85);
+  /* 深蓝紫背景层次 - 匹配图片 */
+  --bg-primary: #0a0818;
+  --bg-secondary: #1a1533;
+  --bg-tertiary: #2a1f4a;
+  --bg-card: rgba(26, 21, 51, 0.85);
   
-  /* 科技感玻璃态 */
-  --glass-bg: rgba(0, 20, 40, 0.6);
-  --glass-border: rgba(0, 180, 255, 0.15);
-  --glass-hover: rgba(0, 180, 255, 0.08);
-  --glass-glow: rgba(0, 180, 255, 0.3);
+  /* 科技感玻璃态 - 蓝紫色调 */
+  --glass-bg: rgba(20, 10, 40, 0.6);
+  --glass-border: rgba(100, 80, 255, 0.15);
+  --glass-hover: rgba(100, 80, 255, 0.08);
+  --glass-glow: rgba(100, 80, 255, 0.3);
   
   /* 文字层次 */
   --text-primary: #ffffff;
-  --text-secondary: rgba(180, 220, 255, 0.9);
-  --text-muted: rgba(120, 180, 220, 0.7);
-  --text-subtle: rgba(80, 140, 180, 0.5);
+  --text-secondary: rgba(200, 180, 255, 0.9);
+  --text-muted: rgba(160, 140, 220, 0.7);
+  --text-subtle: rgba(120, 100, 180, 0.5);
   
-  /* 科技感强调色 */
-  --accent-cyan: #00d4ff;
-  --accent-cyan-dim: rgba(0, 212, 255, 0.3);
-  --accent-blue: #0080ff;
-  --accent-emerald: #00ff9d;
-  --accent-amber: #ffaa00;
-  --accent-rose: #ff3366;
-  --accent-violet: #8855ff;
+  /* 科技感强调色 - 匹配图片的蓝色和粉色 */
+  --accent-cyan: #4a9eff;
+  --accent-cyan-dim: rgba(74, 158, 255, 0.3);
+  --accent-blue: #6b8cff;
+  --accent-emerald: #4affd4;
+  --accent-amber: #ffb347;
+  --accent-rose: #ff6b9d;
+  --accent-violet: #bb86fc;
   
   /* 状态色 - 发光版 */
-  --status-normal: #00ff9d;
-  --status-warning: #ffaa00;
-  --status-danger: #ff6633;
-  --status-critical: #ff2244;
+  --status-normal: #4affd4;
+  --status-warning: #ffb347;
+  --status-danger: #ff6b9d;
+  --status-critical: #ff4757;
   
   /* HUD 专用色 */
-  --hud-line: rgba(0, 180, 255, 0.4);
-  --hud-corner: rgba(0, 212, 255, 0.8);
-  --hud-grid: rgba(0, 100, 150, 0.1);
+  --hud-line: rgba(100, 80, 255, 0.4);
+  --hud-corner: rgba(74, 158, 255, 0.8);
+  --hud-grid: rgba(80, 60, 150, 0.1);
   
   /* 间距系统 */
   --space-xs: 4px;
@@ -118,14 +118,14 @@ body::after {
   100% { background-position: 0% 200%; }
 }
 
-/* 深空发光效果 */
+/* 深空发光效果 - 蓝紫色调 */
 .deep-space-glow {
   position: fixed;
   inset: 0;
   background: 
-    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(0, 100, 180, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 50% at 20% 100%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 40% at 90% 80%, rgba(136, 85, 255, 0.06) 0%, transparent 40%);
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(74, 158, 255, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 20% 100%, rgba(187, 134, 252, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 90% 80%, rgba(255, 107, 157, 0.06) 0%, transparent 40%);
   pointer-events: none;
   z-index: 0;
 }
@@ -682,8 +682,107 @@ body::after {
 }
 
 /* ============================================
-   滚动条
+   标头特有科技感样式 - 匹配图片
    ============================================ */
+
+.header-container {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 0;
+}
+
+.header-bg-shape {
+  position: relative;
+  background: linear-gradient(180deg, rgba(10, 25, 80, 0.9) 0%, rgba(5, 10, 30, 0.95) 100%);
+  border-bottom: 2px solid #00d4ff;
+  box-shadow: 0 5px 25px rgba(0, 212, 255, 0.4), inset 0 0 15px rgba(0, 212, 255, 0.2);
+  padding: 12px 80px;
+  clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+  min-width: 480px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  margin-top: -1px;
+}
+
+.header-line-left, .header-line-right {
+  position: absolute;
+  top: 15px;
+  height: 2px;
+  width: 42%;
+  z-index: 5;
+}
+
+.header-line-left {
+  left: 0;
+  background: linear-gradient(90deg, transparent 0%, #00d4ff 70%, #00d4ff 100%);
+  box-shadow: -5px 0 10px rgba(0, 212, 255, 0.5);
+  clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
+}
+
+.header-line-right {
+  right: 0;
+  background: linear-gradient(270deg, transparent 0%, #00d4ff 70%, #00d4ff 100%);
+  box-shadow: 5px 0 10px rgba(0, 212, 255, 0.5);
+  clip-path: polygon(5% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.header-line-inner {
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  right: 15%;
+  height: 4px;
+  background: #00d4ff;
+  box-shadow: 0 0 20px #00d4ff, 0 0 40px rgba(0, 212, 255, 0.6);
+  border-radius: 2px 2px 0 0;
+}
+
+.hud-title-main {
+  font-size: 26px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(0, 212, 255, 1), 0 0 25px rgba(0, 212, 255, 0.7), 0 0 40px rgba(0, 212, 255, 0.4);
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* 顶部装饰线 */
+.header-top-decorator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.header-top-line {
+  position: absolute;
+  top: 15px;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: rgba(0, 212, 255, 0.3);
+}
+
+.header-top-line::before, .header-top-line::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #00d4ff;
+}
+
+.header-top-line::before { left: 0; border-right: none; border-bottom: none; }
+.header-top-line::after { right: 0; border-left: none; border-bottom: none; }
 
 ::-webkit-scrollbar {
   width: 4px;

@@ -16,13 +16,15 @@ export function BatteryCellWithLayers({
   scale = 1,
   mode,
   temperature = 28,
-  showCrossSection = true,
+  showCrossSection = false,
+  crossSectionAxes = ['x'],
 }: {
   position?: [number, number, number]
   scale?: number
   mode: DemoMode
   temperature?: number
   showCrossSection?: boolean
+  crossSectionAxes?: Array<'x' | 'z'>
 }) {
   const timeRef = useRef(0)
   
@@ -34,292 +36,326 @@ export function BatteryCellWithLayers({
   // 层级尺寸（相对单位，放大展示）
   const layers = {
     cell: { width: 1.0, height: 1.4, depth: 0.35 },      // 电池芯
-    silicone: 0.06,    // 硅胶垫厚度
-    pcm1: 0.12,        // 一级PCM厚度
-    foil: 0.03,        // 铝箔厚度
-    pcm2: 0.10,        // 二级PCM厚度
-    aerogel: 0.08,     // 气凝胶厚度
-    shell: 0.04,       // 外壳厚度
+    silicone: 0.08,    // 硅胶垫厚度
+    pcm1: 0.14,        // 一级PCM厚度
+    foil: 0.05,        // 铝箔厚度
+    pcm2: 0.12,        // 二级PCM厚度
+    aerogel: 0.10,     // 气凝胶厚度
+    shell: 0.06,       // 外壳厚度
   }
   
   // 颜色定义
   const colors = {
-    cell: '#94a3b8',
-    cellInner: '#cbd5e1',
-    silicone: '#c4b5fd',
+    cell: '#64748b',
+    cellInner: '#94a3b8',
+    silicone: '#a78bfa',
     pcm1: pcm1Active ? '#06b6d4' : '#0e7490',
     pcm1Glow: '#22d3ee',
-    foil: '#e2e8f0',
+    foil: '#94a3b8',
     pcm2: pcm2Active ? '#f97316' : '#3b82f6',
     pcm2Glow: '#fb923c',
-    aerogel: '#f0fdfa',
-    aerogelGlow: '#5eead4',
-    shell: '#64748b',
+    aerogel: '#0f172a',
+    aerogelGlow: '#22d3ee',
+    shell: '#0b1222',
   }
   
   useFrame((_, delta) => {
     timeRef.current += delta
   })
   
+  const wrapThickness = layers.silicone + layers.pcm1 + layers.foil + layers.pcm2 + layers.aerogel + layers.shell
+
   // 计算总宽度
-  const totalWidth = layers.cell.width + 
-    (layers.silicone + layers.pcm1 + layers.foil + layers.pcm2 + layers.aerogel + layers.shell) * 2
+  const totalWidth = layers.cell.width + wrapThickness * 2
+
+  const crossSectionOffsetX = totalWidth / 2 + 0.22
+  const totalDepth = layers.cell.depth + wrapThickness * 2
+  const crossSectionOffsetZ = totalDepth / 2 + 0.22
+
+  const CrossSectionLayers = () => (
+    <>
+      {/* 从左到右依次排列各层 */}
+      {/* 外壳 - 左 */}
+      <Box args={[layers.shell, layers.cell.height, layers.cell.depth]} position={[-totalWidth / 2 + layers.shell / 2, 0, 0]}>
+        <meshStandardMaterial color={colors.shell} metalness={0.7} roughness={0.4} />
+      </Box>
+
+      {/* 气凝胶 - 左 */}
+      <Box
+        args={[layers.aerogel, layers.cell.height * 0.95, layers.cell.depth * 0.95]}
+        position={[-totalWidth / 2 + layers.shell + layers.aerogel / 2, 0, 0]}
+        renderOrder={2}
+      >
+        <meshStandardMaterial
+          color={colors.aerogel}
+          emissive={colors.aerogelGlow}
+          emissiveIntensity={aerogelActive ? 0.95 : 0.55}
+          roughness={0.9}
+        />
+      </Box>
+
+      {/* 二级PCM - 左 */}
+      <Box
+        args={[layers.pcm2, layers.cell.height * 0.9, layers.cell.depth * 0.9]}
+        position={[-totalWidth / 2 + layers.shell + layers.aerogel + layers.pcm2 / 2, 0, 0]}
+        renderOrder={3}
+      >
+        <meshStandardMaterial
+          color={colors.pcm2}
+          emissive={pcm2Active ? colors.pcm2Glow : '#60a5fa'}
+          emissiveIntensity={pcm2Active ? 1.35 : 0.75}
+          roughness={0.3}
+        />
+      </Box>
+
+      {/* 铝箔 - 左 */}
+      <Box
+        args={[layers.foil, layers.cell.height * 0.85, layers.cell.depth * 0.85]}
+        position={[-totalWidth / 2 + layers.shell + layers.aerogel + layers.pcm2 + layers.foil / 2, 0, 0]}
+        renderOrder={4}
+      >
+        <meshStandardMaterial color={colors.foil} emissive="#ffffff" emissiveIntensity={0.2} metalness={0.95} roughness={0.15} />
+      </Box>
+
+      {/* 一级PCM - 左 */}
+      <Box
+        args={[layers.pcm1, layers.cell.height * 0.8, layers.cell.depth * 0.8]}
+        position={[-totalWidth / 2 + layers.shell + layers.aerogel + layers.pcm2 + layers.foil + layers.pcm1 / 2, 0, 0]}
+        renderOrder={5}
+      >
+        <meshStandardMaterial
+          color={colors.pcm1}
+          emissive={colors.pcm1Glow}
+          emissiveIntensity={pcm1Active ? 1.35 : 0.85}
+          roughness={0.3}
+        />
+      </Box>
+
+      {/* 硅胶垫 - 左 */}
+      <Box
+        args={[layers.silicone, layers.cell.height * 0.75, layers.cell.depth * 0.75]}
+        position={[-totalWidth / 2 + layers.shell + layers.aerogel + layers.pcm2 + layers.foil + layers.pcm1 + layers.silicone / 2, 0, 0]}
+        renderOrder={6}
+      >
+        <meshStandardMaterial color={colors.silicone} emissive="#a78bfa" emissiveIntensity={0.95} roughness={0.4} />
+      </Box>
+
+      {/* 电池核心 */}
+      <RoundedBox args={[layers.cell.width, layers.cell.height, layers.cell.depth]} position={[0, 0, 0]} radius={0.03} renderOrder={7}>
+        <meshStandardMaterial color={colors.cell} emissive="#94a3b8" emissiveIntensity={0.22} metalness={0.12} roughness={0.65} />
+      </RoundedBox>
+
+      {/* 电池核心轮廓线框（保证可见性，但不抢包裹层） */}
+      <RoundedBox
+        args={[layers.cell.width + 0.02, layers.cell.height + 0.02, layers.cell.depth + 0.02]}
+        position={[0, 0, 0]}
+        radius={0.032}
+        renderOrder={10}
+      >
+        <meshStandardMaterial
+          color="#0f172a"
+          emissive="#22d3ee"
+          emissiveIntensity={0.08}
+          transparent
+          opacity={0.18}
+          depthWrite={false}
+          depthTest={false}
+          wireframe
+        />
+      </RoundedBox>
+
+      {/* 电池内部结构示意 */}
+      <group position={[0, 0, 0]}>
+        {/* 电芯分隔 */}
+        {[-0.3, -0.1, 0.1, 0.3].map((x, i) => (
+          <Box key={i} args={[0.15, layers.cell.height * 0.85, layers.cell.depth * 0.8]} position={[x, 0, 0]}>
+            <meshStandardMaterial
+              color={colors.cellInner}
+              emissive="#cbd5e1"
+              emissiveIntensity={0.12}
+              metalness={0.05}
+              roughness={0.85}
+            />
+          </Box>
+        ))}
+      </group>
+
+      {/* 硅胶垫 - 右 */}
+      <Box
+        args={[layers.silicone, layers.cell.height * 0.75, layers.cell.depth * 0.75]}
+        position={[totalWidth / 2 - layers.shell - layers.aerogel - layers.pcm2 - layers.foil - layers.pcm1 - layers.silicone / 2, 0, 0]}
+      >
+        <meshStandardMaterial color={colors.silicone} emissive="#a78bfa" emissiveIntensity={0.6} roughness={0.4} />
+      </Box>
+
+      {/* 一级PCM - 右 */}
+      <Box
+        args={[layers.pcm1, layers.cell.height * 0.8, layers.cell.depth * 0.8]}
+        position={[totalWidth / 2 - layers.shell - layers.aerogel - layers.pcm2 - layers.foil - layers.pcm1 / 2, 0, 0]}
+      >
+        <meshStandardMaterial
+          color={colors.pcm1}
+          emissive={colors.pcm1Glow}
+          emissiveIntensity={pcm1Active ? 0.85 : 0.55}
+          roughness={0.3}
+        />
+      </Box>
+
+      {/* 铝箔 - 右 */}
+      <Box
+        args={[layers.foil, layers.cell.height * 0.85, layers.cell.depth * 0.85]}
+        position={[totalWidth / 2 - layers.shell - layers.aerogel - layers.pcm2 - layers.foil / 2, 0, 0]}
+      >
+        <meshStandardMaterial color={colors.foil} emissive="#ffffff" emissiveIntensity={0.2} metalness={0.95} roughness={0.15} />
+      </Box>
+
+      {/* 二级PCM - 右 */}
+      <Box
+        args={[layers.pcm2, layers.cell.height * 0.9, layers.cell.depth * 0.9]}
+        position={[totalWidth / 2 - layers.shell - layers.aerogel - layers.pcm2 / 2, 0, 0]}
+      >
+        <meshStandardMaterial
+          color={colors.pcm2}
+          emissive={pcm2Active ? colors.pcm2Glow : '#60a5fa'}
+          emissiveIntensity={pcm2Active ? 0.85 : 0.45}
+          roughness={0.3}
+        />
+      </Box>
+
+      {/* 气凝胶 - 右 */}
+      <Box args={[layers.aerogel, layers.cell.height * 0.95, layers.cell.depth * 0.95]} position={[totalWidth / 2 - layers.shell - layers.aerogel / 2, 0, 0]}>
+        <meshStandardMaterial
+          color={colors.aerogel}
+          emissive={colors.aerogelGlow}
+          emissiveIntensity={aerogelActive ? 0.55 : 0.35}
+          roughness={0.9}
+        />
+      </Box>
+
+      {/* 外壳 - 右 */}
+      <Box args={[layers.shell, layers.cell.height, layers.cell.depth]} position={[totalWidth / 2 - layers.shell / 2, 0, 0]}>
+        <meshStandardMaterial color={colors.shell} metalness={0.7} roughness={0.4} />
+      </Box>
+    </>
+  )
 
   return (
     <group position={position} scale={scale}>
-      {/* 整体外壳 - 半透明 */}
+      {/* 本体分层包覆结构（按文档：硅胶垫→PCM1→铝箔→PCM2→气凝胶→ABS外壳） */}
       <RoundedBox
-        args={[totalWidth, layers.cell.height + 0.1, layers.cell.depth + (layers.silicone + layers.pcm1 + layers.foil + layers.pcm2 + layers.aerogel + layers.shell) * 2]}
-        radius={0.05}
+        args={[layers.cell.width + (layers.silicone * 2), layers.cell.height + 0.02, layers.cell.depth + (layers.silicone * 2)]}
+        radius={0.04}
         position={[0, 0, 0]}
         renderOrder={1}
       >
         <meshStandardMaterial
+          color={colors.silicone}
+          emissive="#a78bfa"
+          emissiveIntensity={0.35}
+          roughness={0.45}
+          metalness={0.15}
+        />
+      </RoundedBox>
+
+      <RoundedBox
+        args={[layers.cell.width + ((layers.silicone + layers.pcm1) * 2), layers.cell.height + 0.04, layers.cell.depth + ((layers.silicone + layers.pcm1) * 2)]}
+        radius={0.04}
+        position={[0, 0, 0]}
+        renderOrder={2}
+      >
+        <meshStandardMaterial
+          color={colors.pcm1}
+          emissive={colors.pcm1Glow}
+          emissiveIntensity={pcm1Active ? 0.55 : 0.22}
+          roughness={0.3}
+          metalness={0.05}
+        />
+      </RoundedBox>
+
+      <RoundedBox
+        args={[layers.cell.width + ((layers.silicone + layers.pcm1 + layers.foil) * 2), layers.cell.height + 0.05, layers.cell.depth + ((layers.silicone + layers.pcm1 + layers.foil) * 2)]}
+        radius={0.04}
+        position={[0, 0, 0]}
+        renderOrder={3}
+      >
+        <meshStandardMaterial
+          color={colors.foil}
+          emissive="#ffffff"
+          emissiveIntensity={0.02}
+          metalness={0.95}
+          roughness={0.12}
+        />
+      </RoundedBox>
+
+      <RoundedBox
+        args={[layers.cell.width + ((layers.silicone + layers.pcm1 + layers.foil + layers.pcm2) * 2), layers.cell.height + 0.06, layers.cell.depth + ((layers.silicone + layers.pcm1 + layers.foil + layers.pcm2) * 2)]}
+        radius={0.04}
+        position={[0, 0, 0]}
+        renderOrder={4}
+      >
+        <meshStandardMaterial
+          color={colors.pcm2}
+          emissive={pcm2Active ? colors.pcm2Glow : '#60a5fa'}
+          emissiveIntensity={pcm2Active ? 0.55 : 0.18}
+          roughness={0.3}
+          metalness={0.05}
+        />
+      </RoundedBox>
+
+      <RoundedBox
+        args={[layers.cell.width + ((layers.silicone + layers.pcm1 + layers.foil + layers.pcm2 + layers.aerogel) * 2), layers.cell.height + 0.08, layers.cell.depth + ((layers.silicone + layers.pcm1 + layers.foil + layers.pcm2 + layers.aerogel) * 2)]}
+        radius={0.045}
+        position={[0, 0, 0]}
+        renderOrder={5}
+      >
+        <meshStandardMaterial
+          color={colors.aerogel}
+          emissive={colors.aerogelGlow}
+          emissiveIntensity={aerogelActive ? 0.12 : 0.06}
+          roughness={0.92}
+          metalness={0.02}
+        />
+      </RoundedBox>
+
+      {/* ABS外壳 - 半透明但更“成型”，不再遮挡内部层 */}
+      <RoundedBox
+        args={[totalWidth, layers.cell.height + 0.1, totalDepth]}
+        radius={0.05}
+        position={[0, 0, 0]}
+        renderOrder={6}
+      >
+        <meshStandardMaterial
           color={colors.shell}
+          emissive="#0ea5e9"
+          emissiveIntensity={0.06}
           transparent
-          opacity={0.16}
+          opacity={0.78}
           depthWrite={false}
-          roughness={0.4}
-          metalness={0.7}
+          roughness={0.65}
+          metalness={0.35}
         />
       </RoundedBox>
       
       {/* 剖面视图 - 展示层级结构 */}
       {showCrossSection && (
-        <group position={[0, 0, 0]}>
-          {/* 从左到右依次排列各层 */}
-          {/* 外壳 - 左 */}
-          <Box
-            args={[layers.shell, layers.cell.height, layers.cell.depth]}
-            position={[-totalWidth/2 + layers.shell/2, 0, 0]}
-          >
-            <meshStandardMaterial color={colors.shell} metalness={0.7} roughness={0.4} />
-          </Box>
-          
-          {/* 气凝胶 - 左 */}
-          <Box
-            args={[layers.aerogel, layers.cell.height * 0.95, layers.cell.depth * 0.95]}
-            position={[-totalWidth/2 + layers.shell + layers.aerogel/2, 0, 0]}
-            renderOrder={2}
-          >
-            <meshStandardMaterial
-              color={colors.aerogel}
-              emissive={colors.aerogelGlow}
-              emissiveIntensity={aerogelActive ? 0.75 : 0.32}
-              transparent
-              opacity={0.88}
-              depthWrite={false}
-              roughness={0.9}
-            />
-          </Box>
-          
-          {/* 二级PCM - 左 */}
-          <Box
-            args={[layers.pcm2, layers.cell.height * 0.9, layers.cell.depth * 0.9]}
-            position={[-totalWidth/2 + layers.shell + layers.aerogel + layers.pcm2/2, 0, 0]}
-            renderOrder={3}
-          >
-            <meshStandardMaterial
-              color={colors.pcm2}
-              emissive={pcm2Active ? colors.pcm2Glow : '#60a5fa'}
-              emissiveIntensity={pcm2Active ? 1.15 : 0.38}
-              transparent
-              opacity={pcm2Active ? 0.95 : 0.82}
-              depthWrite={false}
-              roughness={0.3}
-            />
-          </Box>
-          
-          {/* 铝箔 - 左 */}
-          <Box
-            args={[layers.foil, layers.cell.height * 0.85, layers.cell.depth * 0.85]}
-            position={[-totalWidth/2 + layers.shell + layers.aerogel + layers.pcm2 + layers.foil/2, 0, 0]}
-            renderOrder={4}
-          >
-            <meshStandardMaterial
-              color={colors.foil}
-              emissive="#ffffff"
-              emissiveIntensity={0.2}
-              metalness={0.95}
-              roughness={0.15}
-            />
-          </Box>
-          
-          {/* 一级PCM - 左 */}
-          <Box
-            args={[layers.pcm1, layers.cell.height * 0.8, layers.cell.depth * 0.8]}
-            position={[-totalWidth/2 + layers.shell + layers.aerogel + layers.pcm2 + layers.foil + layers.pcm1/2, 0, 0]}
-            renderOrder={5}
-          >
-            <meshStandardMaterial
-              color={colors.pcm1}
-              emissive={colors.pcm1Glow}
-              emissiveIntensity={pcm1Active ? 1.1 : 0.42}
-              transparent
-              opacity={pcm1Active ? 0.95 : 0.82}
-              depthWrite={false}
-              roughness={0.3}
-            />
-          </Box>
-          
-          {/* 硅胶垫 - 左 */}
-          <Box
-            args={[layers.silicone, layers.cell.height * 0.75, layers.cell.depth * 0.75]}
-            position={[-totalWidth/2 + layers.shell + layers.aerogel + layers.pcm2 + layers.foil + layers.pcm1 + layers.silicone/2, 0, 0]}
-            renderOrder={6}
-          >
-            <meshStandardMaterial
-              color={colors.silicone}
-              emissive="#a78bfa"
-              emissiveIntensity={0.65}
-              transparent
-              opacity={0.92}
-              depthWrite={false}
-              roughness={0.4}
-            />
-          </Box>
-          
-          {/* 电池核心 */}
-          <RoundedBox
-            args={[layers.cell.width, layers.cell.height, layers.cell.depth]}
-            position={[0, 0, 0]}
-            radius={0.03}
-            renderOrder={7}
-          >
-            <meshStandardMaterial
-              color={colors.cell}
-              emissive="#94a3b8"
-              emissiveIntensity={0.08}
-              transparent
-              opacity={0.48}
-              depthWrite={false}
-              metalness={0.12}
-              roughness={0.65}
-            />
-          </RoundedBox>
+        <>
+          {crossSectionAxes.includes('x') && (
+            <group position={[crossSectionOffsetX, 0, 0]}>
+              <CrossSectionLayers />
+            </group>
+          )}
 
-          {/* 电池核心轮廓线框（保证可见性，但不抢包裹层） */}
-          <RoundedBox
-            args={[layers.cell.width + 0.02, layers.cell.height + 0.02, layers.cell.depth + 0.02]}
-            position={[0, 0, 0]}
-            radius={0.032}
-            renderOrder={10}
-          >
-            <meshStandardMaterial
-              color="#0f172a"
-              emissive="#22d3ee"
-              emissiveIntensity={0.08}
-              transparent
-              opacity={0.18}
-              depthWrite={false}
-              depthTest={false}
-              wireframe
-            />
-          </RoundedBox>
-          
-          {/* 电池内部结构示意 */}
-          <group position={[0, 0, 0]}>
-            {/* 电芯分隔 */}
-            {[-0.3, -0.1, 0.1, 0.3].map((x, i) => (
-              <Box
-                key={i}
-                args={[0.15, layers.cell.height * 0.85, layers.cell.depth * 0.8]}
-                position={[x, 0, 0]}
-              >
-                <meshStandardMaterial
-                  color={colors.cellInner}
-                  transparent
-                  opacity={0.26}
-                  depthWrite={false}
-                  metalness={0.05}
-                  roughness={0.85}
-                />
-              </Box>
-            ))}
-          </group>
-          
-          {/* 硅胶垫 - 右 */}
-          <Box
-            args={[layers.silicone, layers.cell.height * 0.75, layers.cell.depth * 0.75]}
-            position={[totalWidth/2 - layers.shell - layers.aerogel - layers.pcm2 - layers.foil - layers.pcm1 - layers.silicone/2, 0, 0]}
-          >
-            <meshStandardMaterial
-              color={colors.silicone}
-              emissive="#a78bfa"
-              emissiveIntensity={0.3}
-              transparent
-              opacity={0.8}
-              roughness={0.4}
-            />
-          </Box>
-          
-          {/* 一级PCM - 右 */}
-          <Box
-            args={[layers.pcm1, layers.cell.height * 0.8, layers.cell.depth * 0.8]}
-            position={[totalWidth/2 - layers.shell - layers.aerogel - layers.pcm2 - layers.foil - layers.pcm1/2, 0, 0]}
-          >
-            <meshStandardMaterial
-              color={colors.pcm1}
-              emissive={colors.pcm1Glow}
-              emissiveIntensity={pcm1Active ? 0.6 : 0.25}
-              transparent
-              opacity={pcm1Active ? 0.85 : 0.6}
-              roughness={0.3}
-            />
-          </Box>
-          
-          {/* 铝箔 - 右 */}
-          <Box
-            args={[layers.foil, layers.cell.height * 0.85, layers.cell.depth * 0.85]}
-            position={[totalWidth/2 - layers.shell - layers.aerogel - layers.pcm2 - layers.foil/2, 0, 0]}
-          >
-            <meshStandardMaterial
-              color={colors.foil}
-              emissive="#ffffff"
-              emissiveIntensity={0.2}
-              metalness={0.95}
-              roughness={0.15}
-            />
-          </Box>
-          
-          {/* 二级PCM - 右 */}
-          <Box
-            args={[layers.pcm2, layers.cell.height * 0.9, layers.cell.depth * 0.9]}
-            position={[totalWidth/2 - layers.shell - layers.aerogel - layers.pcm2/2, 0, 0]}
-          >
-            <meshStandardMaterial
-              color={colors.pcm2}
-              emissive={pcm2Active ? colors.pcm2Glow : '#60a5fa'}
-              emissiveIntensity={pcm2Active ? 0.6 : 0.2}
-              transparent
-              opacity={pcm2Active ? 0.85 : 0.6}
-              roughness={0.3}
-            />
-          </Box>
-          
-          {/* 气凝胶 - 右 */}
-          <Box
-            args={[layers.aerogel, layers.cell.height * 0.95, layers.cell.depth * 0.95]}
-            position={[totalWidth/2 - layers.shell - layers.aerogel/2, 0, 0]}
-          >
-            <meshStandardMaterial
-              color={colors.aerogel}
-              emissive={colors.aerogelGlow}
-              emissiveIntensity={aerogelActive ? 0.4 : 0.15}
-              transparent
-              opacity={0.7}
-              roughness={0.9}
-            />
-          </Box>
-          
-          {/* 外壳 - 右 */}
-          <Box
-            args={[layers.shell, layers.cell.height, layers.cell.depth]}
-            position={[totalWidth/2 - layers.shell/2, 0, 0]}
-          >
-            <meshStandardMaterial color={colors.shell} metalness={0.7} roughness={0.4} />
-          </Box>
-        </group>
+          {crossSectionAxes.includes('z') && (
+            <>
+              <group position={[0, 0, crossSectionOffsetZ]} rotation={[0, -Math.PI / 2, 0]}>
+                <CrossSectionLayers />
+              </group>
+              <group position={[0, 0, -crossSectionOffsetZ]} rotation={[0, Math.PI / 2, 0]}>
+                <CrossSectionLayers />
+              </group>
+            </>
+          )}
+        </>
       )}
       
       {/* 状态指示灯 */}

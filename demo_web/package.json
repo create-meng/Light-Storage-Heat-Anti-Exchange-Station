@@ -6,7 +6,7 @@
     "dev": "next dev --turbo -p 3001",
     "dev:warm": "powershell -NoProfile -Command \"while($true){try{[void](Invoke-WebRequest -UseBasicParsing http://localhost:3001 -TimeoutSec 2); break}catch{Start-Sleep -Milliseconds 350}}\"",
     "dev:fast": "concurrently --kill-others-on-fail -n DEV,WARM -c cyan,magenta \"npm run dev\" \"npm run dev:warm\"",
-    "build": "next build",
+    "build": "cross-env NODE_ENV=production next build",
     "start": "next start",
     "export": "next build && next export"
   },
@@ -29,6 +29,7 @@
     "@types/react-dom": "18.3.0",
     "autoprefixer": "10.4.19",
     "concurrently": "^9.2.1",
+    "cross-env": "^7.0.3",
     "postcss": "8.4.38",
     "tailwindcss": "3.4.4",
     "typescript": "5.4.5"
