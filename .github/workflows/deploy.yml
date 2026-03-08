@@ -42,7 +42,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: demo_web/out
+          path: demo_web/.next-build
 
   deploy:
     environment:
