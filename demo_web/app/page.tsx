@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Zap,
@@ -31,7 +31,7 @@ interface TimelineEvent {
   active: boolean
 }
 
-export default function Home() {
+function Dashboard() {
   const [mode, setMode] = useState<DemoMode>('idle')
   const [alertLevel, setAlertLevel] = useState<AlertLevel>('normal')
   const [temperature, setTemperature] = useState(28.5)
@@ -541,3 +541,12 @@ export default function Home() {
     </main>
   )
 }
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#020617] flex items-center justify-center text-cyan-400 font-tech">LOADING SYSTEM...</div>}>
+      <Dashboard />
+    </Suspense>
+  )
+}
+

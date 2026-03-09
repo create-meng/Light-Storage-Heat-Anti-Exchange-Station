@@ -557,11 +557,16 @@ function EnergyFlowParticles({ mode }: { mode: DemoMode }) {
 }
 
 // ============ 光伏阵列（真实太阳能板样式）============
-function SolarArray() {
+function SolarArray({
+  rows = 2,
+  cols = 2,
+  spacing = 1.02,
+}: {
+  rows?: number
+  cols?: number
+  spacing?: number
+}) {
   const panels: JSX.Element[] = []
-  const rows = 2
-  const cols = 4
-  const spacing = 1.1
 
   // 单块太阳能板组件
   const SolarPanel = ({ position }: { position: [number, number, number] }) => (
@@ -622,6 +627,10 @@ function SolarArray() {
 }
 
 function RoofWithSolar() {
+  const rows = 2
+  const cols = 6
+  const spacing = 1.02
+
   return (
     <group position={[0, 2.55, 0]}>
       {/* 简易房体 */}
@@ -634,14 +643,8 @@ function RoofWithSolar() {
       </group>
 
       {/* 光伏阵列安装在屋顶上 */}
-      <group position={[-2.15, 0.55, -0.6]}>
-        <SolarArray />
-      </group>
-      <group position={[0.25, 0.55, -0.6]}>
-        <SolarArray />
-      </group>
-      <group position={[2.65, 0.55, -0.6]}>
-        <SolarArray />
+      <group position={[0, 0.55, -0.6]}>
+        <SolarArray rows={rows} cols={cols} spacing={spacing} />
       </group>
     </group>
   )
