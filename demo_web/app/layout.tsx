@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN">
-      <body className="text-white">{children}</body>
+      <body className="text-slate-800">{children}</body>
     </html>
   )
 }

@@ -9,43 +9,43 @@
    ============================================ */
 
 :root {
-  /* 深蓝紫背景层次 - 匹配图片 */
-  --bg-primary: #0a0818;
-  --bg-secondary: #1a1533;
-  --bg-tertiary: #2a1f4a;
-  --bg-card: rgba(26, 21, 51, 0.85);
+  /* 白色背景层次 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: rgba(248, 250, 252, 0.95);
   
-  /* 科技感玻璃态 - 蓝紫色调 */
-  --glass-bg: rgba(20, 10, 40, 0.6);
-  --glass-border: rgba(100, 80, 255, 0.15);
-  --glass-hover: rgba(100, 80, 255, 0.08);
-  --glass-glow: rgba(100, 80, 255, 0.3);
+  /* 清爽玻璃态 - 浅色调 */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(148, 163, 184, 0.3);
+  --glass-hover: rgba(241, 245, 249, 0.9);
+  --glass-glow: rgba(59, 130, 246, 0.15);
   
-  /* 文字层次 */
-  --text-primary: #ffffff;
-  --text-secondary: rgba(200, 180, 255, 0.9);
-  --text-muted: rgba(160, 140, 220, 0.7);
-  --text-subtle: rgba(120, 100, 180, 0.5);
+  /* 文字层次 - 深色系 */
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
   
-  /* 科技感强调色 - 匹配图片的蓝色和粉色 */
-  --accent-cyan: #4a9eff;
-  --accent-cyan-dim: rgba(74, 158, 255, 0.3);
-  --accent-blue: #6b8cff;
-  --accent-emerald: #4affd4;
-  --accent-amber: #ffb347;
-  --accent-rose: #ff6b9d;
-  --accent-violet: #bb86fc;
+  /* 科技感强调色 - 保持活力 */
+  --accent-cyan: #0ea5e9;
+  --accent-cyan-dim: rgba(14, 165, 233, 0.2);
+  --accent-blue: #3b82f6;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+  --accent-violet: #8b5cf6;
   
-  /* 状态色 - 发光版 */
-  --status-normal: #4affd4;
-  --status-warning: #ffb347;
-  --status-danger: #ff6b9d;
-  --status-critical: #ff4757;
+  /* 状态色 - 实色版 */
+  --status-normal: #10b981;
+  --status-warning: #f59e0b;
+  --status-danger: #f43f5e;
+  --status-critical: #ef4444;
   
-  /* HUD 专用色 */
-  --hud-line: rgba(100, 80, 255, 0.4);
-  --hud-corner: rgba(74, 158, 255, 0.8);
-  --hud-grid: rgba(80, 60, 150, 0.1);
+  /* HUD 专用色 - 深色线条 */
+  --hud-line: rgba(59, 130, 246, 0.4);
+  --hud-corner: rgba(14, 165, 233, 0.9);
+  --hud-grid: rgba(226, 232, 240, 0.8);
   
   /* 间距系统 */
   --space-xs: 4px;
@@ -83,7 +83,7 @@ body {
   position: relative;
 }
 
-/* 全局网格背景 */
+/* 全局网格背景 - 浅色版 */
 body::before {
   content: '';
   position: fixed;
@@ -96,21 +96,9 @@ body::before {
   z-index: 0;
 }
 
-/* 扫描线效果 */
+/* 移除扫描线效果 */
 body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(0, 180, 255, 0.03) 50%,
-    transparent 100%
-  );
-  background-size: 100% 200%;
-  animation: scanline 8s linear infinite;
-  pointer-events: none;
-  z-index: 1;
+  display: none;
 }
 
 @keyframes scanline {
@@ -118,14 +106,11 @@ body::after {
   100% { background-position: 0% 200%; }
 }
 
-/* 深空发光效果 - 蓝紫色调 */
+/* 浅色背景装饰 - 移除发光效果 */
 .deep-space-glow {
   position: fixed;
   inset: 0;
-  background: 
-    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(74, 158, 255, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 50% at 20% 100%, rgba(187, 134, 252, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 40% at 90% 80%, rgba(255, 107, 157, 0.06) 0%, transparent 40%);
+  background: linear-gradient(180deg, rgba(241, 245, 249, 0.5) 0%, transparent 30%);
   pointer-events: none;
   z-index: 0;
 }
@@ -134,19 +119,20 @@ body::after {
    科技感 HUD 组件系统
    ============================================ */
 
-/* 主面板 - HUD 风格 */
+/* 主面板 - 清爽白底风格 */
 .glass-panel {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   position: relative;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
-/* HUD 边角装饰 */
+/* HUD 边角装饰 - 深色线条 */
 .glass-panel::before,
 .glass-panel::after {
   content: '';
@@ -172,11 +158,12 @@ body::after {
   border-radius: 0 0 var(--radius-lg) 0;
 }
 
-/* 发光边框效果 */
+/* 面板发光效果 - 改为阴影 */
 .glass-panel-glow {
   box-shadow: 
-    0 0 20px rgba(0, 180, 255, 0.1),
-    inset 0 0 20px rgba(0, 180, 255, 0.03);
+    0 2px 8px rgba(14, 165, 233, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    inset 0 0 0 1px rgba(14, 165, 233, 0.05);
 }
 
 /* 大屏紧凑面板 - 用于侧栏密集信息展示（避免出现滚动） */
@@ -199,35 +186,36 @@ body::after {
 
 .glass-panel:hover {
   background: var(--glass-hover);
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(14, 165, 233, 0.3);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1), 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 /* 强调面板 - 用于重要信息 */
 .glass-panel-accent {
-  background: rgba(0, 212, 255, 0.04);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(0, 212, 255, 0.15);
+  background: rgba(14, 165, 233, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(14, 165, 233, 0.25);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
 }
 
 /* 警告面板 */
 .glass-panel-warning {
-  background: rgba(245, 158, 11, 0.06);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  background: rgba(245, 158, 11, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 158, 11, 0.3);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
 }
 
 /* 危险面板 */
 .glass-panel-danger {
-  background: rgba(244, 63, 94, 0.06);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(244, 63, 94, 0.2);
+  background: rgba(244, 63, 94, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(244, 63, 94, 0.3);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
 }
@@ -239,7 +227,7 @@ body::after {
   gap: var(--space-sm);
   padding-bottom: var(--space-md);
   margin-bottom: var(--space-md);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .panel-title {
@@ -289,7 +277,7 @@ body::after {
 /* 进度条 */
 .progress-bar {
   height: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(148, 163, 184, 0.2);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -306,7 +294,7 @@ body::after {
 }
 
 .progress-ring-bg {
-  stroke: rgba(255, 255, 255, 0.08);
+  stroke: rgba(148, 163, 184, 0.2);
 }
 
 .progress-ring-fill {
@@ -314,7 +302,7 @@ body::after {
 }
 
 /* ============================================
-   状态指示器 - 发光效果
+   状态指示器 - 实色版
    ============================================ */
 
 .status-dot {
@@ -328,9 +316,9 @@ body::after {
 .status-dot::after {
   content: '';
   position: absolute;
-  inset: -4px;
+  inset: -2px;
   border-radius: 50%;
-  opacity: 0.4;
+  opacity: 0.3;
   animation: status-pulse 2s ease-in-out infinite;
 }
 
@@ -345,9 +333,9 @@ body::after {
 .status-dot-lg::after {
   content: '';
   position: absolute;
-  inset: -6px;
+  inset: -3px;
   border-radius: 50%;
-  opacity: 0.3;
+  opacity: 0.25;
   animation: status-pulse 2s ease-in-out infinite;
 }
 
@@ -358,30 +346,30 @@ body::after {
 
 .status-normal { 
   background: var(--status-normal); 
-  box-shadow: 0 0 10px var(--status-normal);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
 }
 .status-normal::after { background: var(--status-normal); }
 
 .status-warning { 
   background: var(--status-warning);
-  box-shadow: 0 0 10px var(--status-warning);
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
 }
 .status-warning::after { background: var(--status-warning); }
 
 .status-danger { 
   background: var(--status-danger);
-  box-shadow: 0 0 10px var(--status-danger);
+  box-shadow: 0 0 6px rgba(244, 63, 94, 0.4);
 }
 .status-danger::after { background: var(--status-danger); }
 
 .status-critical { 
   background: var(--status-critical);
-  box-shadow: 0 0 10px var(--status-critical);
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
 }
 .status-critical::after { background: var(--status-critical); }
 
 /* ============================================
-   按钮系统 - 科技感发光
+   按钮系统 - 清爽风格
    ============================================ */
 
 .btn {
@@ -407,7 +395,7 @@ body::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
   transform: translateX(-100%);
   transition: transform 0.5s;
 }
@@ -423,14 +411,14 @@ body::after {
 
 /* 主按钮 */
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent-emerald), #00cc80);
-  color: #001a10;
-  box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+  background: linear-gradient(135deg, var(--accent-emerald), #059669);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 0 30px rgba(0, 255, 157, 0.5);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
 }
 
 .btn-primary:active {
@@ -439,28 +427,28 @@ body::after {
 
 /* 危险按钮 */
 .btn-danger {
-  background: linear-gradient(135deg, var(--accent-rose), #ff0044);
+  background: linear-gradient(135deg, var(--accent-rose), #dc2626);
   color: white;
-  box-shadow: 0 0 20px rgba(255, 51, 102, 0.3);
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.3);
 }
 
 .btn-danger:hover {
-  box-shadow: 0 0 30px rgba(255, 51, 102, 0.5);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.4);
+  transform: translateY(-1px);
 }
 
 /* 次要按钮 */
 .btn-secondary {
-  background: rgba(0, 100, 150, 0.2);
+  background: rgba(14, 165, 233, 0.1);
   color: var(--accent-cyan);
   border: 1px solid var(--accent-cyan-dim);
-  box-shadow: 0 0 10px rgba(0, 180, 255, 0.1);
+  box-shadow: 0 1px 4px rgba(14, 165, 233, 0.1);
 }
 
 .btn-secondary:hover {
-  background: rgba(0, 150, 200, 0.3);
+  background: rgba(14, 165, 233, 0.15);
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 20px rgba(0, 180, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.2);
 }
 
 /* 胶囊按钮 */
@@ -472,7 +460,7 @@ body::after {
 }
 
 /* ============================================
-   标签和徽章 - 发光版
+   标签和徽章 - 实色版
    ============================================ */
 
 .badge {
@@ -489,35 +477,31 @@ body::after {
 }
 
 .badge-normal {
-  background: rgba(0, 255, 157, 0.15);
+  background: rgba(16, 185, 129, 0.15);
   color: var(--status-normal);
-  border: 1px solid rgba(0, 255, 157, 0.4);
-  box-shadow: 0 0 10px rgba(0, 255, 157, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
 }
 
 .badge-warning {
-  background: rgba(255, 170, 0, 0.15);
+  background: rgba(245, 158, 11, 0.15);
   color: var(--status-warning);
-  border: 1px solid rgba(255, 170, 0, 0.4);
-  box-shadow: 0 0 10px rgba(255, 170, 0, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.4);
 }
 
 .badge-danger {
-  background: rgba(255, 102, 51, 0.15);
+  background: rgba(244, 63, 94, 0.15);
   color: var(--status-danger);
-  border: 1px solid rgba(255, 102, 51, 0.4);
-  box-shadow: 0 0 10px rgba(255, 102, 51, 0.2);
+  border: 1px solid rgba(244, 63, 94, 0.4);
 }
 
 .badge-critical {
-  background: rgba(255, 34, 68, 0.15);
+  background: rgba(239, 68, 68, 0.15);
   color: var(--status-critical);
-  border: 1px solid rgba(255, 34, 68, 0.4);
-  box-shadow: 0 0 10px rgba(255, 34, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
 }
 
 /* ============================================
-   时间线 - HUD 风格
+   时间线 - 清爽风格
    ============================================ */
 
 .timeline {
@@ -542,25 +526,23 @@ body::after {
   font-size: 12px;
   font-weight: 700;
   font-family: 'Orbitron', monospace;
-  background: rgba(0, 50, 80, 0.5);
+  background: rgba(241, 245, 249, 1);
   color: var(--text-muted);
-  border: 1px solid rgba(0, 180, 255, 0.2);
+  border: 1px solid rgba(148, 163, 184, 0.4);
   transition: all 0.3s ease;
 }
 
 .timeline-dot.active {
-  background: rgba(0, 180, 255, 0.3);
+  background: rgba(14, 165, 233, 0.15);
   color: var(--accent-cyan);
   border-color: var(--accent-cyan);
-  box-shadow: 
-    0 0 20px rgba(0, 212, 255, 0.4),
-    inset 0 0 10px rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 12px rgba(14, 165, 233, 0.3);
 }
 
 .timeline-connector {
   width: 40px;
   height: 2px;
-  background: rgba(0, 180, 255, 0.15);
+  background: rgba(148, 163, 184, 0.3);
   position: relative;
 }
 
@@ -574,7 +556,7 @@ body::after {
 }
 
 .timeline-connector.active {
-  background: linear-gradient(90deg, var(--accent-cyan), rgba(0, 212, 255, 0.3));
+  background: linear-gradient(90deg, var(--accent-cyan), rgba(14, 165, 233, 0.3));
 }
 
 .timeline-connector.active::after {
@@ -682,7 +664,7 @@ body::after {
 }
 
 /* ============================================
-   标头特有科技感样式 - 匹配图片
+   标头特有科技感样式 - 增强版
    ============================================ */
 
 .header-container {
@@ -696,9 +678,12 @@ body::after {
 
 .header-bg-shape {
   position: relative;
-  background: linear-gradient(180deg, rgba(10, 25, 80, 0.9) 0%, rgba(5, 10, 30, 0.95) 100%);
-  border-bottom: 2px solid #00d4ff;
-  box-shadow: 0 5px 25px rgba(0, 212, 255, 0.4), inset 0 0 15px rgba(0, 212, 255, 0.2);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+  border-bottom: 2px solid var(--accent-cyan);
+  box-shadow: 
+    0 4px 30px rgba(14, 165, 233, 0.25),
+    inset 0 -1px 0 rgba(14, 165, 233, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
   padding: 12px 80px;
   clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
   min-width: 480px;
@@ -719,16 +704,23 @@ body::after {
 
 .header-line-left {
   left: 0;
-  background: linear-gradient(90deg, transparent 0%, #00d4ff 70%, #00d4ff 100%);
-  box-shadow: -5px 0 10px rgba(0, 212, 255, 0.5);
+  background: linear-gradient(90deg, transparent 0%, var(--accent-cyan) 60%, var(--accent-cyan) 100%);
+  box-shadow: 0 0 12px rgba(14, 165, 233, 0.5), 0 0 24px rgba(14, 165, 233, 0.2);
   clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
+  animation: header-line-pulse 3s ease-in-out infinite;
 }
 
 .header-line-right {
   right: 0;
-  background: linear-gradient(270deg, transparent 0%, #00d4ff 70%, #00d4ff 100%);
-  box-shadow: 5px 0 10px rgba(0, 212, 255, 0.5);
+  background: linear-gradient(270deg, transparent 0%, var(--accent-cyan) 60%, var(--accent-cyan) 100%);
+  box-shadow: 0 0 12px rgba(14, 165, 233, 0.5), 0 0 24px rgba(14, 165, 233, 0.2);
   clip-path: polygon(5% 0, 100% 0, 100% 100%, 0 100%);
+  animation: header-line-pulse 3s ease-in-out infinite 1.5s;
+}
+
+@keyframes header-line-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
 }
 
 .header-line-inner {
@@ -737,19 +729,35 @@ body::after {
   left: 15%;
   right: 15%;
   height: 4px;
-  background: #00d4ff;
-  box-shadow: 0 0 20px #00d4ff, 0 0 40px rgba(0, 212, 255, 0.6);
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.6);
   border-radius: 2px 2px 0 0;
+  animation: header-inner-flow 2s linear infinite;
+}
+
+@keyframes header-inner-flow {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .hud-title-main {
   font-size: 26px;
   font-weight: 900;
-  color: #fff;
-  text-shadow: 0 0 12px rgba(0, 212, 255, 1), 0 0 25px rgba(0, 212, 255, 0.7), 0 0 40px rgba(0, 212, 255, 0.4);
+  color: #ffffff;
+  text-shadow: 
+    0 0 10px rgba(14, 165, 233, 0.8),
+    0 0 20px rgba(14, 165, 233, 0.5),
+    0 0 40px rgba(14, 165, 233, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.3);
   letter-spacing: 0.2em;
   white-space: nowrap;
   font-family: 'Orbitron', sans-serif;
+  animation: title-glow 3s ease-in-out infinite;
+}
+
+@keyframes title-glow {
+  0%, 100% { text-shadow: 0 0 10px rgba(14, 165, 233, 0.8), 0 0 20px rgba(14, 165, 233, 0.5), 0 0 40px rgba(14, 165, 233, 0.3), 0 2px 4px rgba(0, 0, 0, 0.3); }
+  50% { text-shadow: 0 0 15px rgba(14, 165, 233, 1), 0 0 30px rgba(14, 165, 233, 0.7), 0 0 60px rgba(14, 165, 233, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3); }
 }
 
 /* 顶部装饰线 */
@@ -769,7 +777,7 @@ body::after {
   left: 5%;
   right: 5%;
   height: 1px;
-  background: rgba(0, 212, 255, 0.3);
+  background: rgba(14, 165, 233, 0.3);
 }
 
 .header-top-line::before, .header-top-line::after {
@@ -778,7 +786,7 @@ body::after {
   top: -5px;
   width: 10px;
   height: 10px;
-  border: 1px solid #00d4ff;
+  border: 1px solid var(--accent-cyan);
 }
 
 .header-top-line::before { left: 0; border-right: none; border-bottom: none; }
@@ -790,16 +798,16 @@ body::after {
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(241, 245, 249, 0.5);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(148, 163, 184, 0.4);
   border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(148, 163, 184, 0.6);
 }
 
 /* ============================================
@@ -827,9 +835,9 @@ body::after {
 
 .border-glow {
   box-shadow: 
-    0 0 0 1px rgba(0, 212, 255, 0.2),
-    0 0 20px -5px rgba(0, 212, 255, 0.3),
-    inset 0 0 20px rgba(0, 212, 255, 0.05);
+    0 0 0 1px rgba(14, 165, 233, 0.2),
+    0 0 12px -3px rgba(14, 165, 233, 0.2),
+    inset 0 0 12px rgba(14, 165, 233, 0.03);
 }
 
 /* HUD 标题样式 */
@@ -843,17 +851,17 @@ body::after {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-shadow: none;
-  filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+  filter: drop-shadow(0 1px 2px rgba(14, 165, 233, 0.3));
 }
 
 /* 科技感分割线 */
 .tech-divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
-/* 数据卡片发光效果 */
+/* 数据卡片发光效果 - 改为阴影 */
 .data-card-glow {
   position: relative;
 }
@@ -865,6 +873,6 @@ body::after {
   background: linear-gradient(135deg, var(--accent-cyan), transparent, var(--accent-violet));
   border-radius: inherit;
   z-index: -1;
-  opacity: 0.3;
-  filter: blur(8px);
+  opacity: 0.15;
+  filter: blur(4px);
 }

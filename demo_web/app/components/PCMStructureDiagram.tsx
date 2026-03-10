@@ -19,16 +19,16 @@ const layers: LayerInfo[] = [
     id: 1,
     name: '电芯核心矩阵',
     size: '1200×800mm',
-    color: '#1e40af',
-    gradient: 'linear-gradient(145deg, #1e40af 0%, #1e3a8a 50%, #172554 100%)',
+    color: '#1e3a8a',
+    gradient: 'linear-gradient(145deg, #1e3a8a 0%, #1e40af 50%, #172554 100%)',
     material: 'core',
   },
   {
     id: 2,
     name: '内侧导热硅胶垫',
     size: '2mm',
-    color: '#c084fc',
-    gradient: 'linear-gradient(145deg, rgba(192,132,252,0.85), rgba(167,139,250,0.7))',
+    color: '#a855f7',
+    gradient: 'linear-gradient(145deg, rgba(168,85,247,0.9), rgba(147,51,234,0.75))',
     material: 'pad',
   },
   {
@@ -36,16 +36,16 @@ const layers: LayerInfo[] = [
     name: '内侧相变材料 PCM-1',
     size: '28-32°C',
     tempRange: 'Stage 1',
-    color: '#06b6d4',
-    gradient: 'linear-gradient(145deg, rgba(6,182,212,0.75), rgba(8,145,178,0.6))',
+    color: '#0891b2',
+    gradient: 'linear-gradient(145deg, rgba(8,145,178,0.85), rgba(14,116,144,0.7))',
     material: 'pcm',
   },
   {
     id: 4,
     name: '铝箔均热层',
     size: '0.5mm',
-    color: '#cbd5e1',
-    gradient: 'linear-gradient(145deg, rgba(203,213,225,0.95), rgba(148,163,184,0.85))',
+    color: '#94a3b8',
+    gradient: 'linear-gradient(145deg, rgba(148,163,184,0.95), rgba(100,116,139,0.85))',
     material: 'foil',
   },
   {
@@ -53,24 +53,24 @@ const layers: LayerInfo[] = [
     name: '外侧相变材料 PCM-2',
     size: '55-60°C',
     tempRange: 'Stage 2',
-    color: '#f97316',
-    gradient: 'linear-gradient(145deg, rgba(249,115,22,0.75), rgba(234,88,12,0.6))',
+    color: '#ea580c',
+    gradient: 'linear-gradient(145deg, rgba(234,88,12,0.85), rgba(194,65,12,0.7))',
     material: 'pcm',
   },
   {
     id: 6,
     name: '纳米孔气凝胶毯',
     size: '10mm',
-    color: '#5eead4',
-    gradient: 'linear-gradient(145deg, rgba(94,234,212,0.5), rgba(20,184,166,0.35))',
+    color: '#14b8a6',
+    gradient: 'linear-gradient(145deg, rgba(20,184,166,0.7), rgba(13,148,136,0.5))',
     material: 'aerogel',
   },
   {
     id: 7,
     name: 'ABS保护外壳',
     size: '5mm',
-    color: '#334155',
-    gradient: 'linear-gradient(145deg, rgba(51,65,85,0.95), rgba(30,41,59,0.85))',
+    color: '#1e293b',
+    gradient: 'linear-gradient(145deg, rgba(30,41,59,0.95), rgba(15,23,42,0.85))',
     material: 'shell',
   },
 ]
@@ -170,14 +170,15 @@ export default function PCMStructureDiagram() {
                   >
                     <div
                       className="w-3 h-3 rounded-sm flex-shrink-0"
-                      style={{ background: layer.color, boxShadow: `0 0 4px ${layer.color}` }}
+                      style={{ background: layer.color, boxShadow: `0 1px 3px ${layer.color}60` }}
                     />
                     <div className="flex-1 min-w-0">
                       <div
-                        className="text-[11px] leading-4 font-medium text-white"
+                        className="text-[11px] leading-4 font-medium"
                         style={{
                           whiteSpace: 'nowrap',
-                          opacity: isHighlight ? 1 : 0.9,
+                          color: 'var(--text-primary)',
+                          opacity: isHighlight ? 1 : 0.85,
                         }}
                       >
                         {layer.name}
@@ -237,11 +238,11 @@ export default function PCMStructureDiagram() {
                           background: layer.gradient,
                           border: isHighlight
                             ? `2px solid ${layer.color}`
-                            : `1px solid ${isActive ? layer.color : `${layer.color}40`}`,
+                            : `1.5px solid ${isActive ? layer.color : `${layer.color}60`}`,
                           boxShadow: isHighlight
-                            ? `0 0 25px ${layer.color}80, 0 0 50px ${layer.color}40, inset 0 1px 0 rgba(255,255,255,0.15)`
+                            ? `0 2px 8px ${layer.color}40, inset 0 1px 0 rgba(255,255,255,0.1)`
                             : isActive
-                              ? `0 0 20px ${layer.color}60, inset 0 1px 0 rgba(255,255,255,0.1)`
+                              ? `0 2px 6px ${layer.color}30, inset 0 1px 0 rgba(255,255,255,0.08)`
                               : `inset 0 1px 0 rgba(255,255,255,0.05)`,
                         }}
                       />
@@ -249,7 +250,7 @@ export default function PCMStructureDiagram() {
                         <motion.div
                           className="absolute inset-0 rounded-lg"
                           animate={{
-                            opacity: [0.3, 0.6, 0.3],
+                            opacity: [0.2, 0.4, 0.2],
                           }}
                           transition={{
                             duration: 2,
@@ -257,7 +258,7 @@ export default function PCMStructureDiagram() {
                             ease: 'easeInOut',
                           }}
                           style={{
-                            background: `radial-gradient(ellipse at center, ${layer.color}40 0%, transparent 70%)`,
+                            background: `radial-gradient(ellipse at center, ${layer.color}25 0%, transparent 70%)`,
                           }}
                         />
                       )}
@@ -275,13 +276,13 @@ export default function PCMStructureDiagram() {
                           <div
                             className="absolute inset-0 rounded-lg"
                             style={{
-                              background: 'radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.2) 0%, transparent 70%)',
+                              background: 'radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 70%)',
                             }}
                           />
                           <motion.div
                             className="absolute inset-0 rounded-lg"
                             animate={{
-                              opacity: [0.2, 0.5, 0.2],
+                              opacity: [0.15, 0.35, 0.15],
                             }}
                             transition={{
                               duration: 3,
@@ -289,8 +290,8 @@ export default function PCMStructureDiagram() {
                               ease: 'easeInOut',
                             }}
                             style={{
-                              background: 'radial-gradient(ellipse at center, rgba(94,234,212,0.3) 0%, transparent 60%)',
-                              boxShadow: 'inset 0 0 20px rgba(94,234,212,0.2)',
+                              background: 'radial-gradient(ellipse at center, rgba(20,184,166,0.2) 0%, transparent 60%)',
+                            boxShadow: 'inset 0 0 12px rgba(20,184,166,0.15)',
                             }}
                           />
                         </>

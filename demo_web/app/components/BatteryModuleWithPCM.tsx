@@ -197,12 +197,12 @@ export function BatteryModuleWithPCM({
         {[-0.24, -0.08, 0.08, 0.24].map((x, idx) => (
           <RoundedBox key={`cell-${idx}`} args={[0.14, 0.72, 0.38]} position={[x, 0, 0]} radius={0.015}>
             <meshStandardMaterial
-              color="#e2e8f0"
+              color="#1e293b"
               transparent
-              opacity={showDetails ? 0.22 : 0.14}
+              opacity={showDetails ? 0.75 : 0.55}
               depthWrite={false}
-              metalness={0.05}
-              roughness={0.85}
+              metalness={0.3}
+              roughness={0.6}
             />
           </RoundedBox>
         ))}
@@ -210,11 +210,11 @@ export function BatteryModuleWithPCM({
         {/* 上盖板 */}
         <RoundedBox args={[layer.battery - 0.02, 0.05, 0.42]} position={[0, 0.42, 0]} radius={0.02}>
           <meshStandardMaterial
-            color="#94a3b8"
+            color="#334155"
             transparent
-            opacity={0.25}
-            metalness={0.35}
-            roughness={0.5}
+            opacity={0.65}
+            metalness={0.4}
+            roughness={0.45}
           />
         </RoundedBox>
 

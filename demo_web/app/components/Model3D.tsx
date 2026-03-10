@@ -238,41 +238,41 @@ function StationShell() {
     <group position={[0, 0, 0]}>
       <RoundedBox args={[7.8, 2.4, 4.2]} position={[0, 1.2, 0]} radius={0.06} renderOrder={1}>
         <meshStandardMaterial
-          color="#0b1222"
+          color="#e2e8f0"
           transparent
-          opacity={0.10}
-          roughness={0.55}
-          metalness={0.15}
+          opacity={0.12}
+          roughness={0.35}
+          metalness={0.05}
           depthWrite={false}
         />
       </RoundedBox>
 
       <lineSegments position={[0, 1.2, 0]}>
         <edgesGeometry args={[new THREE.BoxGeometry(7.8, 2.4, 4.2)]} />
-        <lineBasicMaterial color="#0b2a55" transparent opacity={0.12} depthWrite={false} />
+        <lineBasicMaterial color="#0ea5e9" transparent opacity={0.16} depthWrite={false} />
       </lineSegments>
 
       <RoundedBox args={[7.6, 0.05, 4.0]} position={[0, 0.025, 0]} radius={0.04}>
-        <meshStandardMaterial color="#0f172a" metalness={0.6} roughness={0.35} />
+        <meshStandardMaterial color="#cbd5e1" metalness={0.2} roughness={0.5} />
       </RoundedBox>
 
       <RoundedBox args={[7.4, 2.2, 0.04]} position={[0, 1.1, -1.35]} radius={0.02} renderOrder={2}>
         <meshStandardMaterial
-          color="#1e293b"
+          color="#cbd5e1"
           transparent
-          opacity={0.14}
-          metalness={0.15}
-          roughness={0.9}
+          opacity={0.18}
+          metalness={0.08}
+          roughness={0.6}
           depthWrite={false}
         />
       </RoundedBox>
       <RoundedBox args={[7.4, 2.2, 0.04]} position={[0, 1.1, 1.35]} radius={0.02} renderOrder={2}>
         <meshStandardMaterial
-          color="#1e293b"
+          color="#cbd5e1"
           transparent
-          opacity={0.14}
-          metalness={0.15}
-          roughness={0.9}
+          opacity={0.18}
+          metalness={0.08}
+          roughness={0.6}
           depthWrite={false}
         />
       </RoundedBox>
@@ -284,7 +284,7 @@ function SwapBay() {
   return (
     <group position={[0, 0.02, 1.55]}>
       <RoundedBox args={[7.2, 0.05, 1.35]} position={[0, 0.025, 0]} radius={0.04}>
-        <meshStandardMaterial color="#0b1222" metalness={0.35} roughness={0.85} />
+        <meshStandardMaterial color="#e2e8f0" metalness={0.12} roughness={0.8} />
       </RoundedBox>
       <Line points={[[-3.4, 0.06, 0.55], [3.4, 0.06, 0.55]]} color="#38bdf8" lineWidth={1} transparent opacity={0.35} />
       <Line points={[[-3.4, 0.06, -0.55], [3.4, 0.06, -0.55]]} color="#38bdf8" lineWidth={1} transparent opacity={0.35} />
@@ -298,7 +298,7 @@ function EquipmentBay() {
   return (
     <group position={[0, 0.02, -1.55]}>
       <RoundedBox args={[7.2, 0.05, 1.35]} position={[0, 0.025, 0]} radius={0.04}>
-        <meshStandardMaterial color="#0b1222" metalness={0.35} roughness={0.85} />
+        <meshStandardMaterial color="#e2e8f0" metalness={0.12} roughness={0.8} />
       </RoundedBox>
     </group>
   )
@@ -638,7 +638,7 @@ function RoofWithSolar() {
       {/* 双坡屋顶 */}
       <group position={[0, 0.1, 0.15]}>
         <RoundedBox args={[7.55, 0.08, 2.1]} position={[0, 0.35, 0]} rotation={[0.0, 0.0, 0.0]} radius={0.02}>
-          <meshStandardMaterial color="#334155" metalness={0.15} roughness={0.7} emissive="#0b1222" emissiveIntensity={0.15} />
+          <meshStandardMaterial color="#cbd5e1" metalness={0.12} roughness={0.65} emissive="#e0f2fe" emissiveIntensity={0.08} />
         </RoundedBox>
       </group>
 
@@ -666,11 +666,11 @@ function EnergyStorageSystem({ mode, temperature }: { mode: DemoMode; temperatur
       {/* 储能柜外壳 - 透明优化 */}
       <RoundedBox args={[1.4, 1.1, 1.4]} position={[0, 0.5, 0]} radius={0.08} renderOrder={4}>
         <meshStandardMaterial
-          color="#0f172a"
+          color="#e2e8f0"
           metalness={0.4}
           roughness={0.7}
           transparent
-          opacity={0.18}
+          opacity={0.22}
           depthWrite={false}
         />
       </RoundedBox>
@@ -1022,10 +1022,10 @@ function Platform() {
   return (
     <group>
       <RoundedBox args={[8, 0.1, 5]} position={[0, -0.05, 0]} radius={0.03}>
-        <meshStandardMaterial color="#1e293b" metalness={0.9} roughness={0.2} />
+        <meshStandardMaterial color="#f1f5f9" metalness={0.25} roughness={0.7} />
       </RoundedBox>
       {/* 地板网格 */}
-      <gridHelper args={[16, 32, '#0b1222', '#070b14']} position={[0, 0.01, 0]} />
+      <gridHelper args={[16, 32, '#cbd5e1', '#e2e8f0']} position={[0, 0.01, 0]} />
     </group>
   )
 }
@@ -1080,11 +1080,11 @@ function Scene({
       }}
     >
       {/* 增强光照系统 - 提升材质质感 */}
-      <ambientLight intensity={0.35} />
-      <hemisphereLight intensity={0.5} color="#e0f2fe" groundColor="#0f172a" />
+      <ambientLight intensity={0.65} />
+      <hemisphereLight intensity={0.75} color="#ffffff" groundColor="#f8fafc" />
       <directionalLight
         position={[8, 12, 8]}
-        intensity={1.5}
+        intensity={1.25}
         castShadow
         shadow-mapSize={[4096, 4096]}
         shadow-bias={-0.00008}
@@ -1148,7 +1148,7 @@ function Scene({
           mipmapBlur
           radius={0.5}
         />
-        <Vignette eskil={false} offset={0.25} darkness={0.35} />
+        <Vignette eskil={false} offset={0.25} darkness={0.18} />
       </EffectComposer>
       
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.06, 0]} receiveShadow>
@@ -1161,7 +1161,7 @@ function Scene({
 
 export default function Model3D(props: ModelSceneProps) {
   return (
-    <div style={{ width: '100%', height: '100%', background: 'linear-gradient(180deg, #0a0f1a 0%, #0f172a 100%)' }}>
+    <div style={{ width: '100%', height: '100%', background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)' }}>
       <Canvas
         shadows="soft"
         dpr={Math.min(1.5, typeof window !== 'undefined' ? window.devicePixelRatio : 1)}
@@ -1172,8 +1172,8 @@ export default function Model3D(props: ModelSceneProps) {
         }}
         camera={{ position: [6, 4, 8], fov: 42 }}
       >
-        <color attach="background" args={['#0a0f1a']} />
-        <fog attach="fog" args={['#0a0f1a', 15, 35]} />
+        <color attach="background" args={['#f8fafc']} />
+        <fog attach="fog" args={['#f8fafc', 15, 35]} />
         <Scene {...props} />
       </Canvas>
     </div>

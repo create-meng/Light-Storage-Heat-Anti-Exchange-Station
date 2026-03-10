@@ -46,17 +46,17 @@ export function BatteryCellWithLayers({
   
   // 颜色定义
   const colors = {
-    cell: '#64748b',
-    cellInner: '#94a3b8',
-    silicone: '#a78bfa',
-    pcm1: pcm1Active ? '#06b6d4' : '#0e7490',
+    cell: '#1e293b',
+    cellInner: '#334155',
+    silicone: '#a855f7',
+    pcm1: pcm1Active ? '#0891b2' : '#0e7490',
     pcm1Glow: '#22d3ee',
     foil: '#94a3b8',
-    pcm2: pcm2Active ? '#f97316' : '#3b82f6',
+    pcm2: pcm2Active ? '#ea580c' : '#3b82f6',
     pcm2Glow: '#fb923c',
-    aerogel: '#0f172a',
+    aerogel: '#14b8a6',
     aerogelGlow: '#22d3ee',
-    shell: '#0b1222',
+    shell: '#1e293b',
   }
   
   useFrame((_, delta) => {

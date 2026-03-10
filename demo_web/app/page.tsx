@@ -225,8 +225,6 @@ function Dashboard() {
 
   return (
     <main className="min-h-screen relative overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
-      {/* 深空发光背景层 */}
-      <div className="deep-space-glow" />
       
       {/* 全屏 3D 舞台 */}
       <div className="fixed inset-0 z-10">
@@ -261,8 +259,8 @@ function Dashboard() {
         </div>
         
         {/* 扫描线装饰 */}
-        <div className="absolute top-20 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--hud-line)] to-transparent opacity-50" />
-        <div className="absolute bottom-20 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--hud-line)] to-transparent opacity-50" />
+        <div className="absolute top-20 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--hud-line)] to-transparent opacity-60" />
+        <div className="absolute bottom-20 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--hud-line)] to-transparent opacity-60" />
       </div>
 
       <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
@@ -348,7 +346,7 @@ function Dashboard() {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className={`status-dot-lg status-${alertLevel} ${alertLevel !== 'normal' ? 'animate-pulse-subtle' : ''}`} />
-                  <span className="text-xl font-semibold text-white font-tech tracking-wider">{getAlertText()}</span>
+                  <span className="text-xl font-semibold font-tech tracking-wider" style={{ color: 'var(--text-primary)' }}>{getAlertText()}</span>
                 </div>
               </div>
 
@@ -391,7 +389,7 @@ function Dashboard() {
                   </div>
                 </div>
                 <div className="flex-1 flex flex-col justify-center">
-                  <div className="p-3 rounded bg-[var(--bg-card)] border border-[var(--glass-border)]">
+                  <div className="p-3 rounded bg-white/80 border border-slate-200">
                     <div className="text-xs text-center" style={{ color: 'var(--text-muted)' }}>
                       系统正常运行中
                     </div>
@@ -544,7 +542,7 @@ function Dashboard() {
 
 export default function Home() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#020617] flex items-center justify-center text-cyan-400 font-tech">LOADING SYSTEM...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center text-cyan-600 font-tech">LOADING SYSTEM...</div>}>
       <Dashboard />
     </Suspense>
   )
