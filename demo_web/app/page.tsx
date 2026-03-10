@@ -51,6 +51,71 @@ function Dashboard() {
   const [timeline, setTimeline] = useState<TimelineEvent[]>([])
   const timeoutsRef = useRef<number[]>([])
 
+  const renderControlBar = () => {
+    return (
+      <div className="flex items-center justify-between w-full">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
+            <Activity className="w-5 h-5 text-cyan-500 animate-pulse" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] font-tech tracking-[0.2em] text-slate-400 uppercase">System Status</span>
+            <span className="text-sm font-tech font-bold text-slate-700 tracking-wider">
+              {mode === 'idle' ? 'SYSTEM READY' : mode === 'normal' ? 'MONITORING ACTIVE' : 'CRITICAL ALERT'}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 bg-white/20 p-1.5 rounded-xl border border-white/30">
+          <button 
+            onClick={startNormalDemo} 
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-tech text-sm transition-all duration-300 ${
+              mode === 'normal' 
+              ? 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]' 
+              : 'hover:bg-white/50 text-slate-600'
+            }`}
+          >
+            <Play className={`w-4 h-4 ${mode === 'normal' ? 'fill-current' : ''}`} />
+            正常演示
+          </button>
+          
+          <button 
+            onClick={startAbnormalDemo} 
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-tech text-sm transition-all duration-300 ${
+              mode === 'abnormal' 
+              ? 'bg-rose-500 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)]' 
+              : 'hover:bg-white/50 text-slate-600'
+            }`}
+          >
+            <AlertTriangle className={`w-4 h-4 ${mode === 'abnormal' ? 'fill-current' : ''}`} />
+            异常演示
+          </button>
+
+          <div className="w-px h-6 bg-slate-300/50 mx-1" />
+
+          <button 
+            onClick={resetDemo} 
+            className="flex items-center gap-2 px-6 py-2.5 rounded-lg font-tech text-sm text-slate-500 hover:bg-white/50 transition-all duration-300"
+          >
+            <RotateCcw className="w-4 h-4" />
+            系统重置
+          </button>
+        </div>
+
+        <div className="flex items-center gap-6 min-w-[140px] justify-end">
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] font-tech text-slate-400">CONNECTIVITY</span>
+            <div className="flex gap-1 mt-1">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className={`w-1.5 h-3 rounded-full ${i <= 3 ? 'bg-cyan-500' : 'bg-slate-200'}`} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   useEffect(() => {
     const updateTime = () => {
       const now = new Date()
@@ -240,27 +305,20 @@ function Dashboard() {
 
       {/* HUD 装饰边框 */}
       <div className="fixed inset-0 z-30 pointer-events-none">
-        {/* 四角装饰 */}
-        <div className="absolute top-0 left-0 w-32 h-32">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--hud-corner)] to-transparent" />
-          <div className="absolute top-0 left-0 h-full w-1 bg-gradient-b from-[var(--hud-corner)] to-transparent" />
+        <div className="hud-frame">
+          <div className="hud-frame-top" />
+          <div className="hud-frame-bottom" />
+          <div className="hud-frame-left" />
+          <div className="hud-frame-right" />
+
+          <div className="hud-node hud-node-tl" />
+          <div className="hud-node hud-node-tr" />
+          <div className="hud-node hud-node-bl" />
+          <div className="hud-node hud-node-br" />
+
+          <div className="hud-scan hud-scan-top" />
+          <div className="hud-scan hud-scan-bottom" />
         </div>
-        <div className="absolute top-0 right-0 w-32 h-32">
-          <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-l from-[var(--hud-corner)] to-transparent" />
-          <div className="absolute top-0 right-0 h-full w-1 bg-gradient-b from-[var(--hud-corner)] to-transparent" />
-        </div>
-        <div className="absolute bottom-0 left-0 w-32 h-32">
-          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--hud-corner)] to-transparent" />
-          <div className="absolute bottom-0 left-0 h-full w-1 bg-gradient-t from-[var(--hud-corner)] to-transparent" />
-        </div>
-        <div className="absolute bottom-0 right-0 w-32 h-32">
-          <div className="absolute bottom-0 right-0 w-full h-1 bg-gradient-to-l from-[var(--hud-corner)] to-transparent" />
-          <div className="absolute bottom-0 right-0 h-full w-1 bg-gradient-t from-[var(--hud-corner)] to-transparent" />
-        </div>
-        
-        {/* 扫描线装饰 */}
-        <div className="absolute top-20 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--hud-line)] to-transparent opacity-60" />
-        <div className="absolute bottom-20 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--hud-line)] to-transparent opacity-60" />
       </div>
 
       <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
@@ -301,10 +359,10 @@ function Dashboard() {
         }
       `}</style>
 
-      <div className="fixed top-16 bottom-4 left-4 right-4 z-40 pointer-events-none">
-        <div className="h-full grid grid-cols-[280px_1fr_360px] gap-3">
+      <div className="fixed top-16 bottom-6 left-4 right-4 z-40 pointer-events-none">
+        <div className="h-full grid grid-cols-[280px_1fr_360px] gap-3 hud-sides">
           {/* 左侧安全看板 */}
-          <aside className="pointer-events-auto overflow-hidden min-h-0">
+          <aside className="pointer-events-auto overflow-hidden min-h-0 hud-side hud-side-left">
             <div className="h-full flex flex-col gap-3 min-h-0">
               {/* DIGITAL TWIN 标题 */}
               <div className="glass-panel glass-panel-glow glass-panel-compact">
@@ -402,7 +460,7 @@ function Dashboard() {
           <div />
 
           {/* 右侧能源与PCM结构看板 */}
-          <aside className="pointer-events-auto overflow-hidden min-h-0">
+          <aside className="pointer-events-auto overflow-hidden min-h-0 hud-side hud-side-right">
             <div className="h-full flex flex-col gap-3 min-h-0">
               {/* 时间显示 */}
               <div className="glass-panel glass-panel-glow glass-panel-compact">
@@ -484,52 +542,71 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="fixed left-0 right-0 bottom-3 z-50 pointer-events-none px-3">
-        <div className="flex justify-center">
-          {/* 底部控制栏 - 科技感设计 */}
-          <div className="pointer-events-auto w-full max-w-[760px]">
-            <div className="glass-panel glass-panel-glow px-5 py-2">
-              <div className="flex items-center gap-4">
-                {/* 时间线 */}
-                <div className="min-w-[180px]">
-                  {timeline.length > 0 ? (
-                    <div className="flex items-center gap-2">
-                      {timeline.slice(0, 4).map((event, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: event.active ? 1 : 0.3, scale: event.active ? 1 : 0.85 }}
-                          className="flex items-center gap-1.5"
-                        >
-                          <div className={`timeline-dot ${event.active ? 'active' : ''}`}>
-                            {index + 1}
-                          </div>
-                          {index < 3 && <div className={`timeline-connector ${event.active ? 'active' : ''}`} />}
-                        </motion.div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <Activity className="w-4 h-4" style={{ color: 'var(--accent-cyan)' }} />
-                      <span className="text-sm font-tech" style={{ color: 'var(--text-muted)' }}>SYSTEM STANDBY</span>
-                    </div>
-                  )}
-                </div>
+      <div className="fixed left-0 right-0 bottom-6 z-50 pointer-events-none px-6">
+        <div className="flex justify-center items-end gap-4">
+          {/* 左侧：系统状态小窗 */}
+          <div className="pointer-events-auto">
+            <div className="glass-panel glass-panel-glow px-4 py-2 flex items-center gap-3 min-w-[140px] bg-white/40 backdrop-blur-xl border-white/20">
+              <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
+                <Activity className="w-4 h-4 text-cyan-500 animate-pulse" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[9px] font-tech tracking-[0.1em] text-slate-400 uppercase leading-tight">Status</span>
+                <span className="text-xs font-tech font-bold text-slate-700 tracking-wider">
+                  {mode === 'idle' ? 'READY' : mode === 'normal' ? 'MONITORING' : 'ALERT'}
+                </span>
+              </div>
+            </div>
+          </div>
 
-                {/* 控制按钮 */}
-                <div className="flex items-center gap-3">
-                  <button onClick={startNormalDemo} className="btn btn-primary">
-                    <Play className="w-4 h-4" />
-                    正常演示
-                  </button>
-                  <button onClick={startAbnormalDemo} className="btn btn-danger">
-                    <AlertTriangle className="w-4 h-4" />
-                    异常演示
-                  </button>
-                  <button onClick={resetDemo} className="btn btn-secondary">
-                    <RotateCcw className="w-4 h-4" />
-                    重置
-                  </button>
+          {/* 中间：控制按钮组 */}
+          <div className="pointer-events-auto">
+            <div className="glass-panel glass-panel-glow px-3 py-1.5 flex items-center gap-2 bg-white/40 backdrop-blur-xl border-white/20">
+              <button 
+                onClick={startNormalDemo} 
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-tech text-xs transition-all duration-300 ${
+                  mode === 'normal' 
+                  ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)]' 
+                  : 'hover:bg-white/50 text-slate-600'
+                }`}
+              >
+                <Play className={`w-3.5 h-3.5 ${mode === 'normal' ? 'text-white' : ''}`} />
+                正常
+              </button>
+              
+              <button 
+                onClick={startAbnormalDemo} 
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-tech text-xs transition-all duration-300 ${
+                  mode === 'abnormal' 
+                  ? 'bg-rose-500 text-white shadow-[0_0_15px_rgba(244,63,94,0.3)]' 
+                  : 'hover:bg-white/50 text-slate-600'
+                }`}
+              >
+                <AlertTriangle className={`w-3.5 h-3.5 ${mode === 'abnormal' ? 'text-white' : ''}`} />
+                异常
+              </button>
+
+              <div className="w-px h-4 bg-slate-300/40 mx-1" />
+
+              <button 
+                onClick={resetDemo} 
+                className="flex items-center gap-2 px-4 py-2 rounded-lg font-tech text-xs text-slate-500 hover:bg-white/50 transition-all duration-300"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                重置
+              </button>
+            </div>
+          </div>
+
+          {/* 右侧：连接状态小窗 */}
+          <div className="pointer-events-auto">
+            <div className="glass-panel glass-panel-glow px-4 py-2 flex items-center gap-3 bg-white/40 backdrop-blur-xl border-white/20">
+              <div className="flex flex-col items-start">
+                <span className="text-[9px] font-tech text-slate-400 uppercase leading-tight">Link</span>
+                <div className="flex gap-0.5 mt-1">
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} className={`w-1 h-2 rounded-full ${i <= 3 ? 'bg-cyan-500/80' : 'bg-slate-200'}`} />
+                  ))}
                 </div>
               </div>
             </div>

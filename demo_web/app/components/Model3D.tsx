@@ -236,11 +236,12 @@ function Callout({
 function StationShell() {
   return (
     <group position={[0, 0, 0]}>
+      {/* 原有透明外壳 - 保留内部可见性 */}
       <RoundedBox args={[7.8, 2.4, 4.2]} position={[0, 1.2, 0]} radius={0.06} renderOrder={1}>
         <meshStandardMaterial
           color="#e2e8f0"
           transparent
-          opacity={0.12}
+          opacity={0.05}
           roughness={0.35}
           metalness={0.05}
           depthWrite={false}
@@ -256,26 +257,246 @@ function StationShell() {
         <meshStandardMaterial color="#cbd5e1" metalness={0.2} roughness={0.5} />
       </RoundedBox>
 
-      <RoundedBox args={[7.4, 2.2, 0.04]} position={[0, 1.1, -1.35]} radius={0.02} renderOrder={2}>
-        <meshStandardMaterial
-          color="#cbd5e1"
-          transparent
-          opacity={0.18}
-          metalness={0.08}
-          roughness={0.6}
-          depthWrite={false}
-        />
-      </RoundedBox>
-      <RoundedBox args={[7.4, 2.2, 0.04]} position={[0, 1.1, 1.35]} radius={0.02} renderOrder={2}>
-        <meshStandardMaterial
-          color="#cbd5e1"
-          transparent
-          opacity={0.18}
-          metalness={0.08}
-          roughness={0.6}
-          depthWrite={false}
-        />
-      </RoundedBox>
+      {/* 前后“膜”会影响内部结构清晰度：保留边框线条即可 */}
+      <lineSegments position={[0, 1.1, -1.35]} renderOrder={2}>
+        <edgesGeometry args={[new THREE.BoxGeometry(7.4, 2.2, 0.04)]} />
+        <lineBasicMaterial color="#3b82f6" transparent opacity={0.22} depthWrite={false} />
+      </lineSegments>
+      <lineSegments position={[0, 1.1, 1.35]} renderOrder={2}>
+        <edgesGeometry args={[new THREE.BoxGeometry(7.4, 2.2, 0.04)]} />
+        <lineBasicMaterial color="#3b82f6" transparent opacity={0.22} depthWrite={false} />
+      </lineSegments>
+
+      {/* ========== 换电站外壳装饰 ========== */}
+      
+      {/* 前后门框 - 仅保留边框，中间透明不遮挡内部 */}
+      {/* 前门框 */}
+      <group position={[0, 1.2, 2.35]}>
+        {/* 上边框 */}
+        <RoundedBox args={[5.0, 0.15, 0.1]} position={[0, 1.22, 0]} radius={0.02}>
+          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+        </RoundedBox>
+        {/* 左边框 */}
+        <RoundedBox args={[0.12, 2.6, 0.1]} position={[-2.44, 0, 0]} radius={0.02}>
+          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+        </RoundedBox>
+        {/* 右边框 */}
+        <RoundedBox args={[0.12, 2.6, 0.1]} position={[2.44, 0, 0]} radius={0.02}>
+          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+        </RoundedBox>
+      </group>
+
+      {/* 前侧屋顶梁上的入口/出口指示牌（按截图红框位置） */}
+      <group position={[0, 2.35, 2.42]}>
+        {/* 左侧：车辆入口 */}
+        <group position={[-2.9, 0, 0]} rotation={[0, 0.12, 0]}>
+          <Html transform distanceFactor={12} occlude={false}>
+            <div
+              style={{
+                background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                padding: '2px 6px',
+                borderRadius: '2px',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '8px',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 8px rgba(34,197,94,0.35)',
+              }}
+            >
+              车辆入口
+            </div>
+          </Html>
+        </group>
+
+        {/* 右侧：车辆出口 */}
+        <group position={[2.9, 0, 0]} rotation={[0, -0.12, 0]}>
+          <Html transform distanceFactor={12} occlude={false}>
+            <div
+              style={{
+                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                padding: '2px 6px',
+                borderRadius: '2px',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '8px',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 8px rgba(245,158,11,0.35)',
+              }}
+            >
+              车辆出口
+            </div>
+          </Html>
+        </group>
+      </group>
+
+      {/* 后侧屋顶梁上的入口/出口指示牌（前后对称） */}
+      <group position={[0, 2.35, -2.42]}>
+        {/* 左侧：车辆出口（入口对应出口） */}
+        <group position={[-2.9, 0, 0]} rotation={[0, Math.PI - 0.12, 0]}>
+          <Html transform distanceFactor={12} occlude={false}>
+            <div
+              style={{
+                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                padding: '2px 6px',
+                borderRadius: '2px',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '8px',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 8px rgba(245,158,11,0.35)',
+              }}
+            >
+              车辆出口
+            </div>
+          </Html>
+        </group>
+
+        {/* 右侧：车辆入口（入口对应出口） */}
+        <group position={[2.9, 0, 0]} rotation={[0, Math.PI + 0.12, 0]}>
+          <Html transform distanceFactor={12} occlude={false}>
+            <div
+              style={{
+                background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                padding: '2px 6px',
+                borderRadius: '2px',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '8px',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 8px rgba(34,197,94,0.35)',
+              }}
+            >
+              车辆入口
+            </div>
+          </Html>
+        </group>
+      </group>
+
+      {/* 后门框 */}
+      <group position={[0, 1.2, -2.35]}>
+        {/* 上边框 */}
+        <RoundedBox args={[5.0, 0.15, 0.1]} position={[0, 1.22, 0]} radius={0.02}>
+          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+        </RoundedBox>
+        {/* 左边框 */}
+        <RoundedBox args={[0.12, 2.6, 0.1]} position={[-2.44, 0, 0]} radius={0.02}>
+          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+        </RoundedBox>
+        {/* 右边框 */}
+        <RoundedBox args={[0.12, 2.6, 0.1]} position={[2.44, 0, 0]} radius={0.02}>
+          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+        </RoundedBox>
+      </group>
+
+      {/* 左右侧装饰墙 */}
+      {/* 左侧墙 - 车辆入口侧 */}
+      <group position={[-4.15, 1.2, 0]}>
+        <RoundedBox args={[0.15, 2.6, 5.2]} radius={0.05}>
+          <meshStandardMaterial color="#1e40af" metalness={0.5} roughness={0.35} />
+        </RoundedBox>
+        {/* 换电站标识 */}
+        <group position={[0.1, 0.8, 0]} rotation={[0, Math.PI / 2, 0]}>
+          <Html transform distanceFactor={12} occlude={false}>
+            <div style={{
+              background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+              padding: '4px 10px',
+              borderRadius: '4px',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '11px',
+              whiteSpace: 'nowrap',
+              boxShadow: '0 2px 8px rgba(59,130,246,0.4)',
+              transform: 'scaleX(-1)',
+            }}>
+              换电站
+            </div>
+          </Html>
+        </group>
+      </group>
+
+      {/* 右侧墙 - 车辆出口侧 */}
+      <group position={[4.15, 1.2, 0]}>
+        <RoundedBox args={[0.15, 2.6, 5.2]} radius={0.05}>
+          <meshStandardMaterial color="#1e40af" metalness={0.5} roughness={0.35} />
+        </RoundedBox>
+        {/* 换电站标识 */}
+        <group position={[-0.1, 0.8, 0]} rotation={[0, -Math.PI / 2, 0]}>
+          <Html transform distanceFactor={12} occlude={false}>
+            <div style={{
+              background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+              padding: '4px 10px',
+              borderRadius: '4px',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '11px',
+              whiteSpace: 'nowrap',
+              boxShadow: '0 2px 8px rgba(59,130,246,0.4)',
+              transform: 'scaleX(-1)',
+            }}>
+              换电站
+            </div>
+          </Html>
+        </group>
+      </group>
+
+      {/* 顶部装饰横梁 */}
+      <group position={[0, 2.65, 0]}>
+        <RoundedBox args={[8.5, 0.15, 5.8]} radius={0.04}>
+          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+        </RoundedBox>
+        {/* 顶部品牌标识 - 缩小 */}
+        <group position={[0, 0.15, 2.5]}>
+          <Html transform distanceFactor={14} rotation={[-Math.PI/6, 0, 0]} occlude={false}>
+            <div style={{
+              background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
+              padding: '6px 16px',
+              borderRadius: '6px',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              whiteSpace: 'nowrap',
+              letterSpacing: '2px',
+              border: '1px solid rgba(255,255,255,0.35)',
+              boxShadow: '0 6px 18px rgba(37,99,235,0.35)',
+              textShadow: '0 2px 6px rgba(0,0,0,0.35)',
+              backdropFilter: 'blur(6px)',
+            }}>
+              智能换电站
+            </div>
+          </Html>
+        </group>
+      </group>
+
+      {/* 四角支撑柱 */}
+      {[[-4.0, 0, 2.3], [4.0, 0, 2.3], [-4.0, 0, -2.3], [4.0, 0, -2.3]].map((pos, i) => (
+        <group key={`pillar-${i}`} position={pos as [number, number, number]}>
+          <Cylinder args={[0.12, 0.15, 2.8, 16]} position={[0, 1.3, 0]}>
+            <meshStandardMaterial color="#475569" metalness={0.8} roughness={0.2} />
+          </Cylinder>
+          {/* 柱顶装饰 */}
+          <Cylinder args={[0.18, 0.12, 0.15, 16]} position={[0, 2.75, 0]}>
+            <meshStandardMaterial color="#1e40af" metalness={0.7} roughness={0.25} />
+          </Cylinder>
+          {/* 柱底装饰 */}
+          <Cylinder args={[0.2, 0.2, 0.08, 16]} position={[0, 0.04, 0]}>
+            <meshStandardMaterial color="#64748b" metalness={0.6} roughness={0.3} />
+          </Cylinder>
+        </group>
+      ))}
+
+      {/* 地面车道标线 */}
+      {/* 入口车道线 */}
+      <group position={[0, 0.02, 2.8]}>
+        <Line points={[[-2, 0, 0], [2, 0, 0]]} color="#22c55e" lineWidth={2} transparent opacity={0.8} />
+        <Line points={[[-2.3, 0, 0], [-2, 0, 0]]} color="#22c55e" lineWidth={2} transparent opacity={0.8} />
+        <Line points={[[2, 0, 0], [2.3, 0, 0]]} color="#22c55e" lineWidth={2} transparent opacity={0.8} />
+      </group>
+      {/* 出口车道线 */}
+      <group position={[0, 0.02, -2.8]}>
+        <Line points={[[-2, 0, 0], [2, 0, 0]]} color="#f59e0b" lineWidth={2} transparent opacity={0.8} />
+        <Line points={[[-2.3, 0, 0], [-2, 0, 0]]} color="#f59e0b" lineWidth={2} transparent opacity={0.8} />
+        <Line points={[[2, 0, 0], [2.3, 0, 0]]} color="#f59e0b" lineWidth={2} transparent opacity={0.8} />
+      </group>
     </group>
   )
 }
@@ -364,7 +585,7 @@ function BatteryRacks({ mode, temperature }: { mode: DemoMode; temperature: numb
   // 电池架 - 展示清晰的层级结构
   for (let side = -1; side <= 1; side += 2) {
     for (let col = 1; col <= 2; col++) {
-      const x = side * 2.75
+      const x = side * 2.35
       const z = -0.9 + col * 0.6
 
       racks.push(
