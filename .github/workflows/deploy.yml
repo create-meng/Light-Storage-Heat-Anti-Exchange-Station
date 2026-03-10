@@ -39,10 +39,14 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: /Light-Storage-Heat-Anti-Exchange-Station
         run: npm run build
 
+      - name: Disable Jekyll
+        working-directory: demo_web
+        run: touch out/.nojekyll
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: demo_web/.next-build
+          path: demo_web/out
 
   deploy:
     environment:
