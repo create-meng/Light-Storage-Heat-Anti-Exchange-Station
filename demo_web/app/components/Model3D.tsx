@@ -241,16 +241,16 @@ function StationShell() {
         <meshStandardMaterial
           color="#e2e8f0"
           transparent
-          opacity={0.05}
-          roughness={0.35}
-          metalness={0.05}
+          opacity={0.22}
+          roughness={0.15}
+          metalness={0.25}
           depthWrite={false}
         />
       </RoundedBox>
 
       <lineSegments position={[0, 1.2, 0]}>
         <edgesGeometry args={[new THREE.BoxGeometry(7.8, 2.4, 4.2)]} />
-        <lineBasicMaterial color="#0ea5e9" transparent opacity={0.16} depthWrite={false} />
+        <lineBasicMaterial color="#64748b" transparent opacity={0.18} depthWrite={false} />
       </lineSegments>
 
       <RoundedBox args={[7.6, 0.05, 4.0]} position={[0, 0.025, 0]} radius={0.04}>
@@ -274,15 +274,15 @@ function StationShell() {
       <group position={[0, 1.2, 2.35]}>
         {/* 上边框 */}
         <RoundedBox args={[5.0, 0.15, 0.1]} position={[0, 1.22, 0]} radius={0.02}>
-          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+          <meshStandardMaterial color="#93c5fd" metalness={0.35} roughness={0.45} />
         </RoundedBox>
         {/* 左边框 */}
         <RoundedBox args={[0.12, 2.6, 0.1]} position={[-2.44, 0, 0]} radius={0.02}>
-          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+          <meshStandardMaterial color="#93c5fd" metalness={0.35} roughness={0.45} />
         </RoundedBox>
         {/* 右边框 */}
         <RoundedBox args={[0.12, 2.6, 0.1]} position={[2.44, 0, 0]} radius={0.02}>
-          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+          <meshStandardMaterial color="#93c5fd" metalness={0.35} roughness={0.45} />
         </RoundedBox>
       </group>
 
@@ -376,15 +376,15 @@ function StationShell() {
       <group position={[0, 1.2, -2.35]}>
         {/* 上边框 */}
         <RoundedBox args={[5.0, 0.15, 0.1]} position={[0, 1.22, 0]} radius={0.02}>
-          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+          <meshStandardMaterial color="#93c5fd" metalness={0.35} roughness={0.45} />
         </RoundedBox>
         {/* 左边框 */}
         <RoundedBox args={[0.12, 2.6, 0.1]} position={[-2.44, 0, 0]} radius={0.02}>
-          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+          <meshStandardMaterial color="#93c5fd" metalness={0.35} roughness={0.45} />
         </RoundedBox>
         {/* 右边框 */}
         <RoundedBox args={[0.12, 2.6, 0.1]} position={[2.44, 0, 0]} radius={0.02}>
-          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+          <meshStandardMaterial color="#93c5fd" metalness={0.35} roughness={0.45} />
         </RoundedBox>
       </group>
 
@@ -392,13 +392,13 @@ function StationShell() {
       {/* 左侧墙 - 车辆入口侧 */}
       <group position={[-4.15, 1.2, 0]}>
         <RoundedBox args={[0.15, 2.6, 5.2]} radius={0.05}>
-          <meshStandardMaterial color="#1e40af" metalness={0.5} roughness={0.35} />
+          <meshStandardMaterial color="#bfdbfe" metalness={0.25} roughness={0.55} />
         </RoundedBox>
         {/* 换电站标识 */}
         <group position={[0.1, 0.8, 0]} rotation={[0, Math.PI / 2, 0]}>
           <Html transform distanceFactor={12} occlude={false}>
             <div style={{
-              background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+              background: 'linear-gradient(135deg, #3b82f6 0%, #93c5fd 100%)',
               padding: '4px 10px',
               borderRadius: '4px',
               color: 'white',
@@ -417,13 +417,13 @@ function StationShell() {
       {/* 右侧墙 - 车辆出口侧 */}
       <group position={[4.15, 1.2, 0]}>
         <RoundedBox args={[0.15, 2.6, 5.2]} radius={0.05}>
-          <meshStandardMaterial color="#1e40af" metalness={0.5} roughness={0.35} />
+          <meshStandardMaterial color="#bfdbfe" metalness={0.25} roughness={0.55} />
         </RoundedBox>
         {/* 换电站标识 */}
         <group position={[-0.1, 0.8, 0]} rotation={[0, -Math.PI / 2, 0]}>
           <Html transform distanceFactor={12} occlude={false}>
             <div style={{
-              background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+              background: 'linear-gradient(135deg, #3b82f6 0%, #93c5fd 100%)',
               padding: '4px 10px',
               borderRadius: '4px',
               color: 'white',
@@ -442,26 +442,22 @@ function StationShell() {
       {/* 顶部装饰横梁 */}
       <group position={[0, 2.65, 0]}>
         <RoundedBox args={[8.5, 0.15, 5.8]} radius={0.04}>
-          <meshStandardMaterial color="#1e40af" metalness={0.6} roughness={0.3} />
+          <meshStandardMaterial color="#93c5fd" metalness={0.35} roughness={0.45} />
         </RoundedBox>
         {/* 顶部品牌标识 - 缩小 */}
         <group position={[0, 0.15, 2.5]}>
           <Html transform distanceFactor={14} rotation={[-Math.PI/6, 0, 0]} occlude={false}>
             <div style={{
-              background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
+              background: 'linear-gradient(135deg, #3b82f6 0%, #93c5fd 100%)',
               padding: '6px 16px',
               borderRadius: '6px',
               color: 'white',
               fontWeight: 'bold',
               fontSize: '13px',
               whiteSpace: 'nowrap',
-              letterSpacing: '2px',
-              border: '1px solid rgba(255,255,255,0.35)',
-              boxShadow: '0 6px 18px rgba(37,99,235,0.35)',
-              textShadow: '0 2px 6px rgba(0,0,0,0.35)',
-              backdropFilter: 'blur(6px)',
+              boxShadow: '0 4px 12px rgba(59,130,246,0.4)',
             }}>
-              智能换电站
+              换电站
             </div>
           </Html>
         </group>
@@ -475,7 +471,7 @@ function StationShell() {
           </Cylinder>
           {/* 柱顶装饰 */}
           <Cylinder args={[0.18, 0.12, 0.15, 16]} position={[0, 2.75, 0]}>
-            <meshStandardMaterial color="#1e40af" metalness={0.7} roughness={0.25} />
+            <meshStandardMaterial color="#93c5fd" metalness={0.5} roughness={0.4} />
           </Cylinder>
           {/* 柱底装饰 */}
           <Cylinder args={[0.2, 0.2, 0.08, 16]} position={[0, 0.04, 0]}>
@@ -593,7 +589,7 @@ function BatteryRacks({ mode, temperature }: { mode: DemoMode; temperature: numb
           {/* 架体框架 */}
           <RoundedBox args={[0.6, 2.0, 0.9]} radius={0.04} renderOrder={3}>
             <meshStandardMaterial
-              color="#0f172a"
+              color="#475569"
               transparent
               opacity={0.14}
               roughness={0.25}
@@ -604,14 +600,14 @@ function BatteryRacks({ mode, temperature }: { mode: DemoMode; temperature: numb
 
           <lineSegments renderOrder={4}>
             <edgesGeometry args={[new THREE.BoxGeometry(0.6, 2.0, 0.9)]} />
-            <lineBasicMaterial color="#1e293b" transparent opacity={0.18} depthTest={true} depthWrite={false} />
+            <lineBasicMaterial color="#64748b" transparent opacity={0.18} depthTest={true} depthWrite={false} />
           </lineSegments>
 
           {/* 层板 - 透明展示 */}
           {[-0.35, -0.05, 0.25, 0.55, 0.85].map((y, i) => (
             <RoundedBox key={i} args={[0.52, 0.04, 0.82]} position={[0, y, 0]} radius={0.02}>
               <meshStandardMaterial
-                color="#1e293b"
+                color="#64748b"
                 metalness={0.35}
                 roughness={0.6}
                 transparent
@@ -1021,7 +1017,7 @@ function BatterySystem({
         renderOrder={3}
       >
         <meshStandardMaterial
-          color="#0f172a"
+          color="#475569"
           transparent
           opacity={0.14}
           roughness={0.25}

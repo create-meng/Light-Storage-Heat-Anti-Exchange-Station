@@ -36,8 +36,8 @@ export function PCMLayerExplodedView({
       name: '电池核心', 
       nameEn: 'Battery Cell',
       thickness: 0.5, 
-      color: '#1e293b', 
-      emissive: '#0f172a',
+      color: '#334155', 
+      emissive: '#64748b',
       emissiveIntensity: 0.1,
       opacity: 0.95,
       metalness: 0.4,
@@ -111,12 +111,12 @@ export function PCMLayerExplodedView({
       name: '外壳', 
       nameEn: 'Shell',
       thickness: 0.03, 
-      color: '#475569', 
-      emissive: '#0b1222',
-      emissiveIntensity: 0.08,
+      color: '#94a3b8', 
+      emissive: '#e2e8f0',
+      emissiveIntensity: 0.15,
       opacity: 0.9,
-      metalness: 0.7,
-      roughness: 0.4,
+      metalness: 0.5,
+      roughness: 0.5,
       description: 'ABS结构',
     },
   ], [pcmStage])
@@ -140,7 +140,7 @@ export function PCMLayerExplodedView({
       <group position={[0, 1.2, 0]}>
         <Html transform distanceFactor={8} center>
           <div className="text-center pointer-events-none">
-            <div className="text-xs font-tech tracking-widest" style={{ color: 'var(--accent-cyan)' }}>
+            <div className="text-xs font-tech tracking-widest" style={{ color: 'var(--accent-blue)' }}>
               DUAL-STAGE PCM STRUCTURE
             </div>
             <div className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>
@@ -255,8 +255,8 @@ export function PCMLayerExplodedView({
             <div 
               className="text-xs font-tech tracking-wider"
               style={{ 
-                color: pcmStage === 0 ? 'var(--accent-cyan)' 
-                  : pcmStage === 1 ? 'var(--accent-cyan)'
+                color: pcmStage === 0 ? 'var(--accent-blue)' 
+                  : pcmStage === 1 ? 'var(--accent-blue)'
                   : pcmStage === 2 ? 'var(--status-warning)'
                   : 'var(--status-danger)'
               }}
@@ -299,7 +299,7 @@ export function PCMLayerCrossSection({
     { name: '铝箔', height: 12, color: 'rgba(226,232,240,0.7)', textColor: '#94a3b8' },
     { name: '二级PCM', height: 28, color: pcmStage >= 2 ? 'rgba(249,115,22,0.7)' : 'rgba(96,165,250,0.4)', textColor: pcmStage >= 2 ? '#fb7185' : '#64748b', glow: pcmStage === 2 },
     { name: '气凝胶', height: 20, color: 'rgba(255,255,255,0.25)', textColor: '#94a3b8', glow: pcmStage >= 3 },
-    { name: '外壳', height: 14, color: 'rgba(71,85,105,0.8)', textColor: '#64748b' },
+    { name: '外壳', height: 14, color: 'rgba(148,163,184,0.75)', textColor: '#64748b' },
   ]
 
   return (
@@ -337,8 +337,8 @@ export function PCMLayerCrossSection({
           <div 
             className="w-1.5 h-1.5 rounded-full animate-pulse"
             style={{ 
-              backgroundColor: pcmStage === 0 ? 'var(--accent-cyan)'
-                : pcmStage === 1 ? 'var(--accent-cyan)'
+              backgroundColor: pcmStage === 0 ? 'var(--accent-blue)'
+                : pcmStage === 1 ? 'var(--accent-blue)'
                 : pcmStage === 2 ? 'var(--status-warning)'
                 : 'var(--status-danger)'
             }}
@@ -350,8 +350,8 @@ export function PCMLayerCrossSection({
         <span 
           className="text-[10px] font-tech"
           style={{ 
-            color: pcmStage === 0 ? 'var(--accent-cyan)'
-              : pcmStage === 1 ? 'var(--accent-cyan)'
+            color: pcmStage === 0 ? 'var(--accent-blue)'
+              : pcmStage === 1 ? 'var(--accent-blue)'
               : pcmStage === 2 ? 'var(--status-warning)'
               : 'var(--status-danger)'
           }}

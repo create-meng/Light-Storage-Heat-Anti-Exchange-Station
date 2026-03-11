@@ -182,7 +182,7 @@ export function BatteryModuleWithPCM({
         {/* 电池主体轮廓线框（保证可见性，但不抢包裹层） */}
         <RoundedBox args={[layer.battery + 0.02, 0.84, 0.46]} radius={0.032} renderOrder={10}>
           <meshStandardMaterial
-            color="#0f172a"
+            color="#475569"
             emissive="#22d3ee"
             emissiveIntensity={0.06}
             transparent
@@ -197,7 +197,7 @@ export function BatteryModuleWithPCM({
         {[-0.24, -0.08, 0.08, 0.24].map((x, idx) => (
           <RoundedBox key={`cell-${idx}`} args={[0.14, 0.72, 0.38]} position={[x, 0, 0]} radius={0.015}>
             <meshStandardMaterial
-              color="#1e293b"
+              color="#334155"
               transparent
               opacity={showDetails ? 0.75 : 0.55}
               depthWrite={false}
@@ -283,7 +283,7 @@ export function BatteryModuleWithPCM({
         {/* 把手 */}
         {showDetails && (
           <RoundedBox args={[0.22, 0.06, 0.05]} position={[0, 0.22, -0.22]} radius={0.015}>
-            <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.4} />
+            <meshStandardMaterial color="#94a3b8" metalness={0.5} roughness={0.5} />
           </RoundedBox>
         )}
 
@@ -670,11 +670,11 @@ export function BatteryModuleWithPCM({
         radius={0.004}
       >
         <meshStandardMaterial
-          color="#475569"
-          emissive="#0f172a"
-          emissiveIntensity={0.08}
-          metalness={0.7}
-          roughness={0.4}
+          color="#94a3b8"
+          emissive="#e2e8f0"
+          emissiveIntensity={0.12}
+          metalness={0.5}
+          roughness={0.5}
           transparent
           opacity={0.55}
           depthWrite={false}
@@ -687,11 +687,11 @@ export function BatteryModuleWithPCM({
         radius={0.004}
       >
         <meshStandardMaterial
-          color="#475569"
-          emissive="#0f172a"
-          emissiveIntensity={0.08}
-          metalness={0.7}
-          roughness={0.4}
+          color="#94a3b8"
+          emissive="#e2e8f0"
+          emissiveIntensity={0.12}
+          metalness={0.5}
+          roughness={0.5}
           transparent
           opacity={0.55}
           depthWrite={false}
@@ -704,9 +704,9 @@ export function BatteryModuleWithPCM({
         radius={0.004}
       >
         <meshStandardMaterial
-          color="#475569"
-          metalness={0.7}
-          roughness={0.4}
+          color="#94a3b8"
+          metalness={0.5}
+          roughness={0.5}
           transparent
           opacity={0.55}
           depthWrite={false}
@@ -719,9 +719,9 @@ export function BatteryModuleWithPCM({
         radius={0.004}
       >
         <meshStandardMaterial
-          color="#475569"
-          metalness={0.7}
-          roughness={0.4}
+          color="#94a3b8"
+          metalness={0.5}
+          roughness={0.5}
           transparent
           opacity={0.55}
           depthWrite={false}
@@ -758,7 +758,7 @@ export function SmallBatteryModuleWithPCM({
     <group position={position}>
       {/* 电池核心 */}
       <RoundedBox args={[layer.battery, 0.12, 0.18]} radius={0.015}>
-        <meshStandardMaterial color="#1e293b" metalness={0.35} roughness={0.5} />
+        <meshStandardMaterial color="#334155" metalness={0.35} roughness={0.5} />
       </RoundedBox>
       
       {/* 状态灯 */}
@@ -838,16 +838,16 @@ export function SmallBatteryModuleWithPCM({
 
       {/* 外壳层（四周） */}
       <RoundedBox args={[layer.shell, 0.05, 0.06]} position={[-(layer.battery / 2 + layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell / 2), 0, 0]} radius={0.001}>
-        <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.4} transparent opacity={0.8} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.5} roughness={0.5} transparent opacity={0.75} />
       </RoundedBox>
       <RoundedBox args={[layer.shell, 0.05, 0.06]} position={[(layer.battery / 2 + layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell / 2), 0, 0]} radius={0.001}>
-        <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.4} transparent opacity={0.8} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.5} roughness={0.5} transparent opacity={0.75} />
       </RoundedBox>
       <RoundedBox args={[layer.battery + (layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell) * 2, 0.05, layer.shell]} position={[0, 0, (0.18 / 2 + layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell / 2)]} radius={0.001}>
-        <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.4} transparent opacity={0.8} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.5} roughness={0.5} transparent opacity={0.75} />
       </RoundedBox>
       <RoundedBox args={[layer.battery + (layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell) * 2, 0.05, layer.shell]} position={[0, 0, -(0.18 / 2 + layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell / 2)]} radius={0.001}>
-        <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.4} transparent opacity={0.8} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.5} roughness={0.5} transparent opacity={0.75} />
       </RoundedBox>
     </group>
   )
@@ -880,7 +880,7 @@ export function BatteryClusterWithPCM({
     <group position={position}>
       {/* 电池核心 */}
       <RoundedBox args={[layer.battery, 0.78, 0.42]} radius={0.025}>
-        <meshStandardMaterial color="#1e293b" metalness={0.35} roughness={0.5} />
+        <meshStandardMaterial color="#334155" metalness={0.35} roughness={0.5} />
       </RoundedBox>
       
       {/* 内部电芯结构 */}
@@ -903,7 +903,7 @@ export function BatteryClusterWithPCM({
 
       {/* 上盖板 */}
       <RoundedBox args={[layer.battery - 0.02, 0.05, 0.40]} position={[0, 0.40, 0]} radius={0.015}>
-        <meshStandardMaterial color="#0f172a" metalness={0.6} roughness={0.35} />
+        <meshStandardMaterial color="#475569" metalness={0.6} roughness={0.35} />
       </RoundedBox>
 
       {/* 硅胶垫层（四周） */}
@@ -978,16 +978,16 @@ export function BatteryClusterWithPCM({
 
       {/* 外壳层 */}
       <RoundedBox args={[layer.shell, 0.52, 0.18]} position={[-(layer.battery / 2 + layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell / 2), 0, 0]} radius={0.002}>
-        <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.4} transparent opacity={0.85} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.5} roughness={0.5} transparent opacity={0.8} />
       </RoundedBox>
       <RoundedBox args={[layer.shell, 0.52, 0.18]} position={[(layer.battery / 2 + layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell / 2), 0, 0]} radius={0.002}>
-        <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.4} transparent opacity={0.85} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.5} roughness={0.5} transparent opacity={0.8} />
       </RoundedBox>
       <RoundedBox args={[layer.battery + (layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell) * 2, 0.52, layer.shell]} position={[0, 0, (0.42 / 2 + layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell / 2)]} radius={0.002}>
-        <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.4} transparent opacity={0.85} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.5} roughness={0.5} transparent opacity={0.8} />
       </RoundedBox>
       <RoundedBox args={[layer.battery + (layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell) * 2, 0.52, layer.shell]} position={[0, 0, -(0.42 / 2 + layer.siliconePad + layer.pcm1 + layer.foil + layer.pcm2 + layer.aerogel + layer.shell / 2)]} radius={0.002}>
-        <meshStandardMaterial color="#475569" metalness={0.7} roughness={0.4} transparent opacity={0.85} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.5} roughness={0.5} transparent opacity={0.8} />
       </RoundedBox>
     </group>
   )

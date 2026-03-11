@@ -39,6 +39,7 @@ function Dashboard() {
   const [fireWallState, setFireWallState] = useState<FireWallState>('open')
   const [extinguishState, setExtinguishState] = useState<ExtinguishState>('standby')
   const [currentTime, setCurrentTime] = useState('')
+  const [currentDate, setCurrentDate] = useState('')
   const focus: 'overview' = 'overview'
   const [safetyPanelCollapsed, setSafetyPanelCollapsed] = useState(false)
 
@@ -51,71 +52,6 @@ function Dashboard() {
   const [timeline, setTimeline] = useState<TimelineEvent[]>([])
   const timeoutsRef = useRef<number[]>([])
 
-  const renderControlBar = () => {
-    return (
-      <div className="flex items-center justify-between w-full">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-            <Activity className="w-5 h-5 text-cyan-500 animate-pulse" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[10px] font-tech tracking-[0.2em] text-slate-400 uppercase">System Status</span>
-            <span className="text-sm font-tech font-bold text-slate-700 tracking-wider">
-              {mode === 'idle' ? 'SYSTEM READY' : mode === 'normal' ? 'MONITORING ACTIVE' : 'CRITICAL ALERT'}
-            </span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4 bg-white/20 p-1.5 rounded-xl border border-white/30">
-          <button 
-            onClick={startNormalDemo} 
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-tech text-sm transition-all duration-300 ${
-              mode === 'normal' 
-              ? 'bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]' 
-              : 'hover:bg-white/50 text-slate-600'
-            }`}
-          >
-            <Play className={`w-4 h-4 ${mode === 'normal' ? 'fill-current' : ''}`} />
-            正常演示
-          </button>
-          
-          <button 
-            onClick={startAbnormalDemo} 
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-tech text-sm transition-all duration-300 ${
-              mode === 'abnormal' 
-              ? 'bg-rose-500 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)]' 
-              : 'hover:bg-white/50 text-slate-600'
-            }`}
-          >
-            <AlertTriangle className={`w-4 h-4 ${mode === 'abnormal' ? 'fill-current' : ''}`} />
-            异常演示
-          </button>
-
-          <div className="w-px h-6 bg-slate-300/50 mx-1" />
-
-          <button 
-            onClick={resetDemo} 
-            className="flex items-center gap-2 px-6 py-2.5 rounded-lg font-tech text-sm text-slate-500 hover:bg-white/50 transition-all duration-300"
-          >
-            <RotateCcw className="w-4 h-4" />
-            系统重置
-          </button>
-        </div>
-
-        <div className="flex items-center gap-6 min-w-[140px] justify-end">
-          <div className="flex flex-col items-end">
-            <span className="text-[10px] font-tech text-slate-400">CONNECTIVITY</span>
-            <div className="flex gap-1 mt-1">
-              {[1, 2, 3, 4].map(i => (
-                <div key={i} className={`w-1.5 h-3 rounded-full ${i <= 3 ? 'bg-cyan-500' : 'bg-slate-200'}`} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   useEffect(() => {
     const updateTime = () => {
       const now = new Date()
@@ -124,6 +60,7 @@ function Dashboard() {
         minute: '2-digit',
         second: '2-digit'
       }))
+      setCurrentDate(now.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }))
     }
     updateTime()
     const interval = setInterval(updateTime, 1000)
@@ -270,6 +207,8 @@ function Dashboard() {
   const meltL1 = mode !== 'abnormal' ? 0.12 : Math.min(1, Math.max(0, (temperature - 30) / (55 - 30)))
   const meltL2 = mode !== 'abnormal' ? 0.0 : pcmStage >= 2 ? Math.min(1, Math.max(0, (temperature - 55) / (120 - 55))) : 0
 
+  const safetyLogLines = timeline.filter(e => e.active).slice(-3).reverse()
+
   const getAlertBadgeClass = () => {
     switch (alertLevel) {
       case 'normal': return 'badge-normal'
@@ -367,8 +306,8 @@ function Dashboard() {
               {/* DIGITAL TWIN 标题 */}
               <div className="glass-panel glass-panel-glow glass-panel-compact">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] animate-pulse" />
-                  <span className="font-tech text-[11px] font-bold tracking-[0.2em] text-glow" style={{ color: 'var(--accent-cyan)' }}>DIGITAL TWIN</span>
+                  <div className="w-2 h-2 rounded-full bg-[var(--accent-blue)] animate-pulse" />
+                  <span className="font-tech text-[11px] font-bold tracking-[0.2em] text-glow" style={{ color: 'var(--accent-blue)' }}>DIGITAL TWIN</span>
                 </div>
               </div>
 
@@ -398,7 +337,7 @@ function Dashboard() {
               <div className="glass-panel glass-panel-glow glass-panel-compact data-card-glow">
                 <div className="panel-header">
                   <div className="flex items-center gap-2">
-                    <Shield className="w-4 h-4" style={{ color: 'var(--accent-cyan)' }} />
+                    <Shield className="w-4 h-4" style={{ color: 'var(--accent-blue)' }} />
                     <span className="panel-title">预警状态</span>
                   </div>
                 </div>
@@ -442,14 +381,32 @@ function Dashboard() {
               <div className="glass-panel glass-panel-glow glass-panel-compact flex-1 min-h-0">
                 <div className="panel-header">
                   <div className="flex items-center gap-2">
-                    <Zap className="w-4 h-4" style={{ color: 'var(--accent-amber)' }} />
+                    <Zap className="w-4 h-4" style={{ color: alertLevel === 'normal' ? 'var(--accent-emerald)' : alertLevel === 'warning' ? 'var(--accent-amber)' : 'var(--status-critical)' }} />
                     <span className="panel-title">安全提示</span>
                   </div>
                 </div>
-                <div className="flex-1 flex flex-col justify-center">
-                  <div className="p-3 rounded bg-white/80 border border-slate-200">
-                    <div className="text-xs text-center" style={{ color: 'var(--text-muted)' }}>
-                      系统正常运行中
+                <div className="flex-1 flex flex-col justify-center gap-2">
+                  <div className={`p-3 rounded border ${alertLevel === 'normal' ? 'bg-emerald-50/80 border-emerald-200' : alertLevel === 'warning' ? 'bg-amber-50/80 border-amber-200' : 'bg-rose-50/80 border-rose-200'}`}>
+                    <div className="text-xs text-center" style={{ color: alertLevel === 'normal' ? 'var(--accent-emerald)' : alertLevel === 'warning' ? 'var(--accent-amber)' : 'var(--status-critical)' }}>
+                      {alertLevel === 'normal'
+                        ? '系统正常运行中'
+                        : alertLevel === 'warning'
+                          ? `温度波动（${temperature.toFixed(1)}℃ / ${dTdt.toFixed(1)}℃/min），请关注`
+                          : alertLevel === 'danger'
+                            ? `危险升温（${temperature.toFixed(1)}℃ / ${dTdt.toFixed(1)}℃/min），建议人工介入`
+                            : `热失控风险（${temperature.toFixed(1)}℃ / ${dTdt.toFixed(1)}℃/min），系统应急处理中`}
+                    </div>
+                  </div>
+
+                  <div className="rounded border border-[var(--glass-border)] bg-white/35 px-2 py-1.5">
+                    <div className="text-[10px] font-tech tracking-widest" style={{ color: 'var(--text-subtle)' }}>LOG STREAM</div>
+                    <div className="mt-1 space-y-0.5">
+                      {(safetyLogLines.length ? safetyLogLines : [{ time: 'NOW', label: '系统巡检正常', active: true }]).map((e, idx) => (
+                        <div key={`${e.time}-${idx}`} className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>{e.time}</span>
+                          <span className="text-[10px] flex-1 text-right" style={{ color: 'var(--text-primary)' }}>{e.label}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -461,12 +418,15 @@ function Dashboard() {
 
           {/* 右侧能源与PCM结构看板 */}
           <aside className="pointer-events-auto overflow-hidden min-h-0 hud-side hud-side-right">
-            <div className="h-full flex flex-col gap-3 min-h-0">
+            <div className="h-full flex flex-col gap-2 min-h-0">
               {/* 时间显示 */}
               <div className="glass-panel glass-panel-glow glass-panel-compact">
-                <div className="flex justify-center">
-                  <span className="font-mono text-[20px] font-bold text-glow" style={{ color: 'var(--accent-cyan)' }}>
+                <div className="flex flex-col items-center gap-0.5">
+                  <span className="font-mono text-[20px] font-bold text-glow" style={{ color: 'var(--accent-blue)' }}>
                     {currentTime}
+                  </span>
+                  <span className="text-[10px] font-tech tracking-wider" style={{ color: 'var(--text-subtle)' }}>
+                    {currentDate}
                   </span>
                 </div>
               </div>
@@ -504,11 +464,15 @@ function Dashboard() {
                   <span className="data-value text-glow" style={{ color: 'var(--accent-rose)' }}>{loadPower.toFixed(1)}</span>
                   <span className="data-unit">kW</span>
                 </div>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>站电负荷率</span>
-                  <span className={`font-mono text-sm text-glow`} style={{ color: 'var(--accent-rose)' }}>
-                    {loadPower.toFixed(1)} kW
-                  </span>
+                <div className="progress-bar mt-3">
+                  <div
+                    className="progress-bar-fill"
+                    style={{
+                      width: `${Math.min(100, (loadPower / 50) * 100)}%`,
+                      background: 'linear-gradient(90deg, var(--accent-rose), rgba(251,113,133,0.5))',
+                      boxShadow: '0 0 10px rgba(244,63,94,0.35)',
+                    }}
+                  />
                 </div>
               </div>
 
@@ -527,14 +491,10 @@ function Dashboard() {
                 <div className="progress-bar mt-3">
                   <div className="progress-bar-fill" style={{ width: `${storageSoc}%`, background: 'linear-gradient(90deg, var(--accent-emerald), rgba(74,255,212,0.5))', boxShadow: '0 0 10px rgba(74,255,212,0.4)' }} />
                 </div>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>负荷率</span>
-                  <span className="font-mono text-sm text-glow" style={{ color: 'var(--accent-emerald)' }}>0%</span>
-                </div>
               </div>
 
               {/* 双板PCM分层结构示意图 */}
-              <div className="glass-panel glass-panel-glow glass-panel-compact flex-1 min-h-0 overflow-hidden">
+              <div className="glass-panel glass-panel-glow glass-panel-compact flex-[1.35] min-h-0 overflow-hidden">
                 <PCMStructureDiagram />
               </div>
             </div>
@@ -547,8 +507,8 @@ function Dashboard() {
           {/* 左侧：系统状态小窗 */}
           <div className="pointer-events-auto">
             <div className="glass-panel glass-panel-glow px-4 py-2 flex items-center gap-3 min-w-[140px] bg-white/40 backdrop-blur-xl border-white/20">
-              <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-                <Activity className="w-4 h-4 text-cyan-500 animate-pulse" />
+              <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                <Activity className="w-4 h-4 text-blue-500 animate-pulse" />
               </div>
               <div className="flex flex-col">
                 <span className="text-[9px] font-tech tracking-[0.1em] text-slate-400 uppercase leading-tight">Status</span>
@@ -605,7 +565,7 @@ function Dashboard() {
                 <span className="text-[9px] font-tech text-slate-400 uppercase leading-tight">Link</span>
                 <div className="flex gap-0.5 mt-1">
                   {[1, 2, 3, 4].map(i => (
-                    <div key={i} className={`w-1 h-2 rounded-full ${i <= 3 ? 'bg-cyan-500/80' : 'bg-slate-200'}`} />
+                    <div key={i} className={`w-1 h-2 rounded-full ${i <= 3 ? 'bg-blue-500/80' : 'bg-slate-200'}`} />
                   ))}
                 </div>
               </div>

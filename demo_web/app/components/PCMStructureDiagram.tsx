@@ -19,8 +19,8 @@ const layers: LayerInfo[] = [
     id: 1,
     name: '电芯核心矩阵',
     size: '1200×800mm',
-    color: '#1e3a8a',
-    gradient: 'linear-gradient(145deg, #1e3a8a 0%, #1e40af 50%, #172554 100%)',
+    color: '#93c5fd',
+    gradient: 'linear-gradient(145deg, rgba(219,234,254,0.95) 0%, rgba(147,197,253,0.9) 55%, rgba(59,130,246,0.65) 100%)',
     material: 'core',
   },
   {
@@ -69,8 +69,8 @@ const layers: LayerInfo[] = [
     id: 7,
     name: 'ABS保护外壳',
     size: '5mm',
-    color: '#1e293b',
-    gradient: 'linear-gradient(145deg, rgba(30,41,59,0.95), rgba(15,23,42,0.85))',
+    color: '#94a3b8',
+    gradient: 'linear-gradient(145deg, rgba(148,163,184,0.85), rgba(100,116,139,0.75))',
     material: 'shell',
   },
 ]
@@ -120,6 +120,9 @@ export default function PCMStructureDiagram() {
     const listAreaH = Math.max(0, availH - bottomBarH)
     const rowH = Math.max(16, Math.min(26, Math.floor(listAreaH / layers.length)))
 
+    const listContentH = layers.length * rowH + (layers.length - 1) * 2
+    const legendScale = Math.min(1, Math.max(0.72, listAreaH / Math.max(1, listContentH)))
+
     return {
       listW,
       bottomBarH,
@@ -127,6 +130,7 @@ export default function PCMStructureDiagram() {
       baseSceneW,
       baseSceneH,
       rowH,
+      legendScale,
     }
   }, [containerSize.h, containerSize.w])
 
@@ -135,7 +139,7 @@ export default function PCMStructureDiagram() {
       {/* 标题 */}
       <div className="panel-header flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-2">
-          <Layers className="w-4 h-4" style={{ color: 'var(--accent-cyan)' }} />
+          <Layers className="w-4 h-4" style={{ color: 'var(--accent-blue)' }} />
           <span className="panel-title">双极PCM分层结构</span>
         </div>
         <span className="text-[10px] font-tech" style={{ color: 'var(--text-muted)' }}>
@@ -147,7 +151,13 @@ export default function PCMStructureDiagram() {
       <div ref={containerRef} className="flex-1 relative min-h-0 overflow-hidden">
         <div className="absolute inset-0 p-2">
           <div className="h-full grid grid-cols-[135px_1fr] gap-2">
-            <div className="min-h-0">
+            <div
+              className="min-h-0"
+              style={{
+                transform: `scale(${layout.legendScale})`,
+                transformOrigin: 'top left',
+              }}
+            >
               <div className="h-full flex flex-col" style={{ gap: '2px' }}>
                 {layers.map((layer) => (
                   (() => {
@@ -324,9 +334,9 @@ export default function PCMStructureDiagram() {
                       <div
                         className="absolute inset-0 rounded-md shadow-lg"
                         style={{
-                          background: '#1e40af',
-                          border: isActive ? '2px solid #3b82f6' : '1px solid rgba(255,255,255,0.2)',
-                          boxShadow: isActive ? '0 0 15px rgba(59,130,246,0.6)' : 'none',
+                          background: 'linear-gradient(145deg, rgba(219,234,254,0.95), rgba(147,197,253,0.85))',
+                          border: isActive ? '2px solid rgba(59,130,246,0.55)' : '1px solid rgba(59,130,246,0.25)',
+                          boxShadow: isActive ? '0 0 15px rgba(59,130,246,0.25)' : 'none',
                         }}
                       />
                       
@@ -335,7 +345,7 @@ export default function PCMStructureDiagram() {
                         {Array.from({ length: CELL_COLS * CELL_ROWS }).map((_, i) => (
                           <div
                             key={i}
-                            className="rounded-sm bg-blue-600 opacity-90 border-[0.5px] border-blue-400/30"
+                            className="rounded-sm bg-blue-500/70 border-[0.5px] border-white/40"
                           />
                         ))}
                       </div>

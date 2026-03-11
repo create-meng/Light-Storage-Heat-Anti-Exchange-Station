@@ -46,8 +46,8 @@ export function BatteryCellWithLayers({
   
   // 颜色定义
   const colors = {
-    cell: '#1e293b',
-    cellInner: '#334155',
+    cell: '#334155',
+    cellInner: '#475569',
     silicone: '#a855f7',
     pcm1: pcm1Active ? '#0891b2' : '#0e7490',
     pcm1Glow: '#22d3ee',
@@ -56,7 +56,7 @@ export function BatteryCellWithLayers({
     pcm2Glow: '#fb923c',
     aerogel: '#14b8a6',
     aerogelGlow: '#22d3ee',
-    shell: '#1e293b',
+    shell: '#94a3b8',
   }
   
   useFrame((_, delta) => {
@@ -153,7 +153,7 @@ export function BatteryCellWithLayers({
         renderOrder={10}
       >
         <meshStandardMaterial
-          color="#0f172a"
+          color="#475569"
           emissive="#22d3ee"
           emissiveIntensity={0.08}
           transparent
